@@ -64,3 +64,20 @@ jspm_packages/
 
 # dotenv environment variables file
 .env
+
+# Database files (exclude actual database files, keep schema files)
+*.db
+*.sqlite
+*.sqlite3
+*.db-journal
+*.db-wal
+*.db-shm
+data/
+database/
+*.dump
+*.backup
+
+# Keep schema files but exclude data dumps
+!**/schema/
+!**/migrations/
+!*.sql

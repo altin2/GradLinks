@@ -9,7 +9,14 @@ module.exports = async(req,res,next)=>{
   }
 
   try {
-    const verify = jwt.verify(token, process.env.jwtSecret);
+    // Use environment variable or fallback to a default secret
+    const secret = process.env.jwtSecret || "fallback_jwt_secret_key_for_development_only";
+    
+    if (!process.env.jwtSecret) {
+      console.warn("Warning: jwtSecret not found in environment variables. Using fallback secret.");
+    }
+
+    const verify = jwt.verify(token, secret);
 
     req.user = verify.user;
     next();

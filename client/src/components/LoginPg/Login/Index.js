@@ -15,7 +15,6 @@ const Login = ({ setAuth }) => {
     setInputs({ ...inputs, [e.target.name]: e.target.value });
 
   const onSubmitForm = async e => {
-    e.preventDefault();
     try {
       const body = { email, pass: password };
 
