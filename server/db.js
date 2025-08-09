@@ -19,9 +19,9 @@ if (typeof dbConfig.password !== 'string') {
 const pool = new Pool(dbConfig);
 
 // Test the connection
-pool.on('connect', () => {
-    console.log('Connected to PostgreSQL database');
-});
+// pool.on('connect', () => {
+//     console.log('Connected to PostgreSQL database');
+// });
 
 pool.on('error', (err) => {
     console.error('Unexpected error on idle client', err);

@@ -19,6 +19,7 @@ const SignupUser = ({ setAuth }) => {
     setInputs({ ...inputs, [e.target.name]: e.target.value });
 
   const onSubmitForm = async e => {
+    e.preventDefault(); // Prevent form from refreshing the page
     try {
       const body = { email, pass: password, phonenumber };
       const response = await fetch(
@@ -47,37 +48,42 @@ const SignupUser = ({ setAuth }) => {
   };
 
   return (
-    <div classname = 'container'>
-        <div className="header">
-            <div className="text">Sign Up Page</div>
-            <div className ="underline"></div>
-        </div>
-        <div className="inputs">
-            <form onSubmit={onSubmitForm}>
-            <div className="input">
-                <img src={email_icon} alt=""/>
-                <input type="text"name="email"value={email}placeholder="email"onChange={e => onChange(e)}className="form-control my-3"/>
-            </div>
-            <div className="input">
-                <img src={phone_icon} alt=""/>
-                <input type="tel"name="phonenumber"value={phonenumber}placeholder="phone number"onChange={e => onChange(e)}className="form-control my-3"/>
-            </div>
-            <div className="input">
-                <img src={pass_icon} alt=""/>
-                <input type="password"name="password"value={password}placeholder="password"onChange={e => onChange(e)}className="form-control my-3"/>
-            </div>
-            <div className="submit-container">
-                <button className="submit">Sign Up</button>
-            </div>
-            </form>
-            <div className="submit-container">
-                <Link to="/login">Login</Link>
-            </div>
-            
+    <>
+      <div className='bg-container'></div>
+      <div className='signup-container'>
+          <div className="header">
+              <div className="text">Sign Up Page</div>
+              <div className ="underline"></div>
+          </div>
+          <div className="inputs">
+              <form onSubmit={onSubmitForm}>
+              <div className="input">
+                  <img src={email_icon} alt=""/>
+                  <input type="text"name="email"value={email}placeholder="email"onChange={e => onChange(e)}className="form-control my-3"/>
+              </div>
+              <div className="input">
+                  <img src={phone_icon} alt=""/>
+                  <input type="tel"name="phonenumber"value={phonenumber}placeholder="phone number"onChange={e => onChange(e)}className="form-control my-3"/>
+              </div>
+              <div className="input">
+                  <img src={pass_icon} alt=""/>
+                  <input type="password"name="password"value={password}placeholder="password"onChange={e => onChange(e)}className="form-control my-3"/>
+              </div>
+              <div className="submit-container">
+                  <button className="submit">Sign Up</button>
+              </div>
+              </form>
+              <div className="submit-container">
+                <p className="text-acc">Already have an account? </p>
+                  <Link to="/login">Login</Link>
+              </div>
+              
 
-        </div>
-            
-    </div>
+          </div>
+
+              
+      </div>
+    </>
     
     );
 };
