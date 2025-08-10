@@ -5,10 +5,10 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-// components
-import Login from "./components/LoginPg/Login/Index";
-import SignupUser from "./components/LoginPg/Signup/Index";
-import Dashboard from './components/HomePage/Dashboard/Index';
+// Pages
+import Login from "./Pages/LoginPg/Login/Index";
+import SignupUser from "./Pages/LoginPg/Signup/Index";
+import Dashboard from './Pages/HomePage/Dashboard/Index';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);

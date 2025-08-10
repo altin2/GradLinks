@@ -8,5 +8,7 @@ CREATE TABLE
         PictureID VARCHAR(200),
         pass VARCHAR(200),
         FirstName VARCHAR(40),
-        LastName VARCHAR(40)
+        LastName VARCHAR(40),
+
+
     );
