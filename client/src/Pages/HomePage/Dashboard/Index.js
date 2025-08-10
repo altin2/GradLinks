@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import TextType from './TextType';
+import LinktoPgBtn from "../../../Components/Dashboard/LinktoPgBtn";
 const Dashboard = ({ setAuth }) => {
   const [name, setName] = useState("");
 
@@ -42,9 +43,7 @@ const Dashboard = ({ setAuth }) => {
     <div>
       <h1 className="mt-5">Dashboard</h1>
       <TextType text={[`Welcome ${name}`]}typingSpeed={75}pauseDuration={1500}showCursor={true}cursorCharacter="|"/>
-      <button onClick={e => logout(e)} className="btn btn-primary">
-        Logout
-      </button>
+      <LinktoPgBtn func={e => logout(e)} btnStyle="btn btn-primary" text="Logout"/>
     </div>
   );
 };

@@ -3,17 +3,18 @@ import InputForm from "../../../Components/LoginSignup/InputForm";
 import phone_icon from "./Assets/phone-1.png";
 import email_icon from "./Assets/emailicon.png";
 import pass_icon from "./Assets/passicon.png";
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState} from "react";
+import { Link,useNavigate} from "react-router-dom";
 import { toast } from "react-toastify";
-
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
 const SignupUser = ({ setAuth }) => {
   const [inputs, setInputs] = useState({
     email: "",
     password: "",
     phonenumber: ""
   });
-
+  const navigate = useNavigate()
   const { email, password, phonenumber} = inputs;
   
   const onChange = e =>
@@ -63,10 +64,12 @@ const SignupUser = ({ setAuth }) => {
       const parseRes = await response.json();
       
 
-      if (parseRes.jwtToken && isValid) {
+      if (parseRes.jwtToken) {
         localStorage.setItem("token", parseRes.jwtToken);
-        setAuth(true);
+        // setAuth(true);
         toast.success("Registered Successfully");
+        navigate('/login')
+        
       } else {
         setAuth(false);
         toast.error(parseRes);
