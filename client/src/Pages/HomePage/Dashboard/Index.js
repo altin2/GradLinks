@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import TextType from './TextType';
 import LinktoPgBtn from "../../../Components/Dashboard/LinktoPgBtn";
+import { Link } from "react-router-dom";
 const Dashboard = ({ setAuth }) => {
   const [name, setName] = useState("");
-
   const getProfile = async () => {
     try {
       const res = await fetch("http://localhost:5000/dashboard", {
@@ -44,6 +44,8 @@ const Dashboard = ({ setAuth }) => {
       <h1 className="mt-5">Dashboard</h1>
       <TextType text={[`Welcome ${name}`]}typingSpeed={75}pauseDuration={1500}showCursor={true}cursorCharacter="|"/>
       <LinktoPgBtn func={e => logout(e)} btnStyle="btn btn-primary" text="Logout"/>
+      <Link to="/profile"><LinktoPgBtn btnStyle="btn btn-primary" text="Profile"/> </Link>
+      
     </div>
   );
 };
