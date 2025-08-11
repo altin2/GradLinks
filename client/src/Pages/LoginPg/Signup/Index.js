@@ -6,6 +6,8 @@ import pass_icon from "./Assets/passicon.png";
 import React, { useState} from "react";
 import { Link,useNavigate} from "react-router-dom";
 import { toast } from "react-toastify";
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
 const SignupUser = ({ setAuth }) => {
   const [inputs, setInputs] = useState({
     email: "",

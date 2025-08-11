@@ -9,7 +9,6 @@ import "react-toastify/dist/ReactToastify.css";
 import Login from "./Pages/LoginPg/Login/Index";
 import SignupUser from "./Pages/LoginPg/Signup/Index";
 import Dashboard from './Pages/HomePage/Dashboard/Index';
-import UserProfile  from './Pages/HomePage/UserProfile/Index'
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -45,23 +44,43 @@ function App() {
           <Routes>
             <Route
               path="/"
-              element={!isAuthenticated ? (<Login setAuth={setAuth} />) : (<Navigate to="/dashboard" />)}
+              element={
+                !isAuthenticated ? (
+                  <Login setAuth={setAuth} />
+                ) : (
+                  <Navigate to="/dashboard" />
+                )
+              }
             />
             <Route
               path="/login"
-              element={!isAuthenticated ? (<Login setAuth={setAuth} />) : (<Navigate to="/dashboard" />)}
+              element={
+                !isAuthenticated ? (
+                  <Login setAuth={setAuth} />
+                ) : (
+                  <Navigate to="/dashboard" />
+                )
+              }
             />
             <Route
               path="/signup"
-              element={!isAuthenticated ? (<SignupUser setAuth={setAuth} /> ) : (<Navigate to="/dashboard" />)}
+              element={
+                !isAuthenticated ? (
+                  <SignupUser setAuth={setAuth} />
+                ) : (
+                  <Navigate to="/dashboard" />
+                )
+              }
             />
             <Route
               path="/dashboard"
-              element={ isAuthenticated ? (<Dashboard setAuth={setAuth} />) : (<Navigate to="/login" />)}
-            />
-            <Route
-              path="/profile"
-              element={ isAuthenticated ? (<UserProfile />) : (<Navigate to="/login" />)}
+              element={
+                isAuthenticated ? (
+                  <Dashboard setAuth={setAuth} />
+                ) : (
+                  <Navigate to="/login" />
+                )
+              }
             />
           </Routes>
         </div>

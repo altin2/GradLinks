@@ -13,7 +13,7 @@ router.post("/signup",validinfo,async(req,res)=>{
 
         const user = await pool.query("SELECT * FROM users WHERE email = $1",[email])
         if (user.rows.length > 0){
-            return res.status(401).json("User already exists")
+            return res.status(401).send("User already exists")
         }
         const Salt = await bcrypt.genSalt(10);
         const bcryptpassword = await bcrypt.hash(pass,Salt);
