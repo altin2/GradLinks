@@ -6,8 +6,6 @@ import pass_icon from "./Assets/passicon.png";
 import React, { useState} from "react";
 import { Link,useNavigate} from "react-router-dom";
 import { toast } from "react-toastify";
-import PhoneInput from "react-phone-input-2";
-import "react-phone-input-2/lib/style.css";
 const SignupUser = ({ setAuth }) => {
   const [inputs, setInputs] = useState({
     email: "",
@@ -92,7 +90,7 @@ const SignupUser = ({ setAuth }) => {
               <form onSubmit={onSubmitForm}>
               
               <InputForm img={email_icon} onChange={e => onChange(e)} name="email" value={email} type="text"placeholder ="Email"/>
-              <InputForm img={phone_icon} onChange={e => onChange(e)} name="phonenumber" value={phonenumber} type="tel"placeholder ="Phone number"/>
+              <InputForm img={phone_icon} onChange={e => onChange(e)} name="phonenumber" value={phonenumber} placeholder ="Phone number"/>
               <InputForm img={pass_icon} onChange={e => onChange(e)} name="password" value={password} type="password"placeholder ="Password"/>
               <div className="submit-container">
                   <button className="submit">Sign Up</button>
