@@ -6,7 +6,6 @@ import pass_icon from "./Assets/passicon.png";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import supabase from "../../../supabase-client.tsx"
 const SignupUser = ({ setAuth }) => {
   const [inputs, setInputs] = useState({
     email: "",
