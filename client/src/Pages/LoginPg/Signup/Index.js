@@ -1,5 +1,5 @@
 import "./Index.css";
-import InputForm from "../../../Components/LoginSignup/InputForm";
+import InputForm from "../components/InputForm";
 import phone_icon from "./Assets/phone-1.png";
 import email_icon from "./Assets/emailicon.png";
 import pass_icon from "./Assets/passicon.png";

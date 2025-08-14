@@ -4,7 +4,7 @@ import "./Index.css";
 import { toast } from "react-toastify";
 import email_icon from "./Assets/emailicon.png";
 import pass_icon from "./Assets/passicon.png";
-import InputForm from "../../../Components/LoginSignup/InputForm";
+import InputForm from "../components/InputForm";
 const Login = ({ setAuth }) => {
   const [inputs, setInputs] = useState({
     email: "",

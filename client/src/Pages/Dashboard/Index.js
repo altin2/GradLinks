@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import TextType from './TextType';
-import LinktoPgBtn from "../../../Components/Dashboard/LinktoPgBtn";
+import LinktoPgBtn from "./components/LinktoPgBtn";
 const Dashboard = ({ setAuth }) => {
   const [name, setName] = useState("");
 

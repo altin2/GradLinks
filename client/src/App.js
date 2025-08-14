@@ -8,7 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 // Pages
 import Login from "./Pages/LoginPg/Login/Index";
 import SignupUser from "./Pages/LoginPg/Signup/Index";
-import Dashboard from './Pages/HomePage/Dashboard/Index';
+import Dashboard from './Pages/Dashboard/Index';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
