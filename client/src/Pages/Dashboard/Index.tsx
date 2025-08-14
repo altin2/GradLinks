@@ -1,9 +1,11 @@
+
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import TextType from './TextType';
-import LinktoPgBtn from "./components/LinktoPgBtn";
+import TextType from './TextType.tsx';
+import LinktoPgBtn from "./components/LinktoPgBtn.tsx";
 const Dashboard = ({ setAuth }) => {
-  const [name, setName] = useState("");
+  const [name, setName] = useState(null);
+  
 
   const getProfile = async () => {
     try {
@@ -13,10 +15,10 @@ const Dashboard = ({ setAuth }) => {
       });
 
       const parseData = await res.json();
-      if (parseData.firstname===undefined){
+      if (parseData[0].email===undefined){
         setName("New User")
       }else{
-        setName(parseData.firstname);
+        setName(parseData[0].email);
       }
       
     } catch (err) {

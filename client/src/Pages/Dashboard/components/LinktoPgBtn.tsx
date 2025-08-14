@@ -5,5 +5,6 @@ const LinktoPgBtn =({func,btnStyle,text}) =>{
     <button onClick={func} className={btnStyle}>
         {text}
       </button>)
+    
 }
 export default LinktoPgBtn

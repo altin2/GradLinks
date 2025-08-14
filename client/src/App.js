@@ -6,9 +6,9 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 // Pages
-import Login from "./Pages/LoginPg/Login/Index";
-import SignupUser from "./Pages/LoginPg/Signup/Index";
-import Dashboard from './Pages/Dashboard/Index';
+import Login from "./Pages/LoginPg/Login/Index.tsx";
+import SignupUser from "./Pages/LoginPg/Signup/Index.tsx";
+import Dashboard from './Pages/Dashboard/Index.tsx';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);

@@ -1,12 +1,23 @@
+
+const supabase = require("../supabase-server.js")
 const router = require("express").Router()
-const pool = require("../db")
 const authorization = require("../middleware/authorization")
 
 router.get("/",authorization,async(req,res)=>{
     try {
 
-        const user = await pool.query("SELECT email FROM users WHERE userid=$1",[req.user.id])
-        res.json(user.rows[0])
+        const{data,error}=await supabase
+        .from("users")
+        .select()
+        .eq('userid',req.user.id)
+        
+        if (error){
+            res.status(500).send("Server Error")
+        }
+        if(data){
+            res.json(data)
+        }
+        
         
     } catch (err) {
         console.error(err.message)

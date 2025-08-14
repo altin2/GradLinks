@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, createElement } from "react";
+import React from "react";
 import { gsap } from "gsap";
 import "./Index.css";
 
@@ -100,7 +101,7 @@ const TextType = ({
 
           setCurrentTextIndex((prev) => (prev + 1) % textArray.length);
           setCurrentCharIndex(0);
-          timeout = setTimeout(() => { }, pauseDuration);
+          timeout = setTimeout(() => {}, pauseDuration);
         } else {
           timeout = setTimeout(() => {
             setDisplayedText((prev) => prev.slice(0, -1));
@@ -170,7 +171,9 @@ const TextType = ({
     showCursor && (
       <span
         ref={cursorRef}
-        className={`text-type__cursor ${cursorClassName} ${shouldHideCursor ? "text-type__cursor--hidden" : ""}`}
+        className={`text-type__cursor ${cursorClassName} ${
+          shouldHideCursor ? "text-type__cursor--hidden" : ""
+        }`}
       >
         {cursorCharacter}
       </span>
