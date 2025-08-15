@@ -3,7 +3,6 @@ require("dotenv").config()
 module.exports = async(req,res,next)=>{
 
   const token = req.header("jwt_token");
-
   if (!token) {
     return res.status(403).json({ msg: "authorization denied" });
   }
@@ -17,7 +16,6 @@ module.exports = async(req,res,next)=>{
     }
 
     const verify = jwt.verify(token, secret);
-
     req.user = verify.user;
     next();
   } catch (err) {

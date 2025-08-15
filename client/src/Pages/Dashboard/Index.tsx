@@ -13,8 +13,8 @@ const Dashboard = ({ setAuth }) => {
         method: "GET",
         headers: { jwt_token: localStorage.token }
       });
-
       const parseData = await res.json();
+      console.log(parseData)
       if (parseData[0].email===undefined){
         setName("New User")
       }else{

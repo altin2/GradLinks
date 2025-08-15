@@ -9,19 +9,18 @@ router.get("/",authorization,async(req,res)=>{
         const{data,error}=await supabase
         .from("users")
         .select()
-        .eq('userid',req.user.id)
-        
-        if (error){
-            res.status(500).send("Server Error")
+        .eq('id',req.user.id)
+       if (error){
+            res.status(500).send(error)
         }
         if(data){
             res.json(data)
-        }
+        } 
         
         
     } catch (err) {
         console.error(err.message)
-        res.status(500).json("Server Error")
+        res.status(500).json(err)
     }
 })
 

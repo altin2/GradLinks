@@ -6,6 +6,7 @@ import pass_icon from "./Assets/passicon.png";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { parse } from "path";
 const SignupUser = ({ setAuth }) => {
   const [inputs, setInputs] = useState({
     email: "",
@@ -15,8 +16,7 @@ const SignupUser = ({ setAuth }) => {
   const navigate = useNavigate();
   const { email, password, phonenumber } = inputs;
 
-  const onChange = (e) =>
-    setInputs({ ...inputs, [e.target.name]: e.target.value });
+  const onChange = (e) =>setInputs({ ...inputs, [e.target.name]: e.target.value });
 
   const onSubmitForm = async (e) => {
     e.preventDefault();
@@ -24,6 +24,7 @@ const SignupUser = ({ setAuth }) => {
       const body = { email, pass: password, phonenumber };
       //password verification using regular expressions
       var isValid = true;
+
       if (password.length === 0) {
         toast.error("Cannot leave password blank");
         isValid = false;
@@ -48,7 +49,8 @@ const SignupUser = ({ setAuth }) => {
           toast.error("Pass must contain at least 1 special symbol");
           isValid = false;
         }
-      }
+      } 
+      
 
       if (isValid) {
         //Add all inputs to DB
@@ -67,8 +69,7 @@ const SignupUser = ({ setAuth }) => {
         if (parseRes.jwtToken) {
           localStorage.setItem("token", parseRes.jwtToken);
           // setAuth(true);
-          toast.success("Registered Successfully");
-          navigate("/login");
+          toast.success("Registered, verify with email");
         } else {
           setAuth(false);
           toast.error(parseRes);

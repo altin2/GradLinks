@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import email_icon from "./Assets/emailicon.png";
 import pass_icon from "./Assets/passicon.png";
 import InputForm from "../components/InputForm.tsx";
+
 const Login = ({ setAuth }) => {
   const [inputs, setInputs] = useState({
     email: "",
@@ -43,7 +44,7 @@ const Login = ({ setAuth }) => {
       console.error(err.message);
     }
   };
-
+  
   return (
     <>
       <div className="bg-container"></div>
