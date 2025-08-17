@@ -1,10 +1,6 @@
 
 const router = require("express").Router()
-const pool = require('../db')
-const bcrypt = require("bcrypt")
-const jwtGenerator = require('../functions/jwtGenerator')
 const validinfo = require("../middleware/validinfo")
-const authorize = require("../middleware/authorization")
 const supabase = require("../supabase-server.js")
 //signup route
 router.post("/signup",validinfo,async(req,res)=>{
@@ -38,12 +34,9 @@ router.post("/signup",validinfo,async(req,res)=>{
           })
 
         if (error2) {
-            console.log("In jwtAuth.js: ",error2)
+            console.error("In jwtAuth.js: ",error2)
         return res.status(500).send(error2);
         }
-        console.log(data2.user.id)
-        const jwtToken = jwtGenerator(data2.user.id);
-        return res.json({ jwtToken });
     } catch (err) {
         console.error(`in jwtAuth.js: ${err.message}`);
         res.status(500).send("Server Error")
@@ -62,22 +55,35 @@ router.post("/login",validinfo, async(req,res) =>{
         if (data.user===null) {
             return res.status(401).json("Invalid Credential");
         }
-        const jwtToken = jwtGenerator(data.user.id)
-        res.json({jwtToken})
+        res.json([data.session.access_token,data.session.refresh_token])
     } catch (err) {
         console.error(`in jwtAuth.js: ${err.message}`);
         res.status(500).send("Server Error")
     }
 })
 
-router.post("/verify", authorize, (req, res) => {
+
+router.post("/logout", async(req,res)=>{
+  const{error}=await supabase.auth.signOut()
+  if (error) throw error;
+})
+router.post("/verify", async(req,res)=>{
   try {
-    res.json(true);
+    const token = req.headers.jwt_token;
+    if (typeof token === "string" && token.trim() !== "" && token !== "undefined" && token !== "null") {
+      res.json(true);
+    } else {
+      res.json(false);
+    }
+
+    
+    
   } catch (err) {
     console.error(`in jwtAuth.js: ${err.message}`);
-    res.status(500).send("Server error");
+    res.status(500).send(err)
+    
   }
-});
+})
 
 module.exports = router;
 

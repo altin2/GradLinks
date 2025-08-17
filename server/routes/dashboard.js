@@ -1,20 +1,15 @@
 
 const supabase = require("../supabase-server.js")
 const router = require("express").Router()
-const authorization = require("../middleware/authorization")
 
-router.get("/",authorization,async(req,res)=>{
+router.get("/",async(req,res)=>{
     try {
-
-        const{data,error}=await supabase
-        .from("users")
-        .select()
-        .eq('id',req.user.id)
+        const { data: { user } ,error} = await supabase.auth.getUser(req.headers.jwt_token)
        if (error){
             res.status(500).send(error)
         }
-        if(data){
-            res.json(data)
+        if(user){
+            res.json(user.email)
         } 
         
         

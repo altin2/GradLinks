@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, createElement } from "react";
 import React from "react";
 import { gsap } from "gsap";
-import "./Index.css";
+import "../Index.css";
 
 const TextType = ({
   text,

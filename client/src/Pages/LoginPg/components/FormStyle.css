@@ -21,8 +21,8 @@
 }
 
 .input input{
-    height: 50px;
-    width: 400px;
+    max-height: 50px;
+    max-width: 400px;
     background-color: transparent;
     border: none;
     outline: none;

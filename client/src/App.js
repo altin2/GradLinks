@@ -17,12 +17,12 @@ function App() {
     try {
       const res = await fetch("http://localhost:5000/auth/verify", {
         method: "POST",
-        headers: { jwt_token: localStorage.token },
+        headers: { jwt_token: localStorage.access_token },
       });
 
       const parseRes = await res.json();
-
-      setIsAuthenticated(parseRes === true);
+      console.log(parseRes)
+      setIsAuthenticated(parseRes);
     } catch (err) {
       console.error(err.message);
     }
@@ -74,6 +74,16 @@ function App() {
             />
             <Route
               path="/dashboard"
+              element={
+                isAuthenticated ? (
+                  <Dashboard setAuth={setAuth} />
+                ) : (
+                  <Navigate to="/login" />
+                )
+              }
+            />
+            <Route
+              path="/profile"
               element={
                 isAuthenticated ? (
                   <Dashboard setAuth={setAuth} />
