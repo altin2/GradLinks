@@ -6,6 +6,7 @@ import email_icon from "./Assets/emailicon.png";
 import pass_icon from "./Assets/passicon.png";
 import InputForm from "../components/InputForm.tsx";
 
+
 const Login = ({ setAuth }) => {
   const [inputs, setInputs] = useState({
     email: "",

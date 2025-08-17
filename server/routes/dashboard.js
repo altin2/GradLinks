@@ -4,13 +4,24 @@ const router = require("express").Router()
 
 router.get("/",async(req,res)=>{
     try {
-        const { data: { user } ,error} = await supabase.auth.getUser(req.headers.jwt_token)
-       if (error){
-            res.status(500).send(error)
-        }
-        if(user){
-            res.json(user.email)
-        } 
+        const token = req.headers.authorization?.split(" ")[1]; // extract Bearer token
+    if (!token) {
+      return res.status(401).json("No token provided");
+    }
+
+    const { data: { user }, error } = await supabase.auth.getUser(token);
+    //Token is out of time
+    if (error) {
+      console.error(error.message);
+      return res.json("session over");
+    }
+
+    if (!user) {
+      return res.json("session over");
+    }
+
+    return res.json(user.email);
+        
         
         
     } catch (err) {

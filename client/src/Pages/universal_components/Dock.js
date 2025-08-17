@@ -15,7 +15,7 @@ import {
   useRef,
   useState,
 } from "react";
-import "../Index.css";
+import "./DockStyle.css";
 
 function DockItem({
   children,

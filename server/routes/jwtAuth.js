@@ -69,6 +69,7 @@ router.post("/logout", async(req,res)=>{
 })
 router.post("/verify", async(req,res)=>{
   try {
+    
     const token = req.headers.jwt_token;
     if (typeof token === "string" && token.trim() !== "" && token !== "undefined" && token !== "null") {
       res.json(true);

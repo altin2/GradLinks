@@ -7,7 +7,6 @@ import React, { useState} from "react";
 import { Link} from "react-router-dom";
 import { toast } from "react-toastify";
 const SignupUser = ({ setAuth }) => {
-  var SubmittedForm=false
   const [inputs, setInputs] = useState({
     email: "",
     password: "",
@@ -90,9 +89,6 @@ const SignupUser = ({ setAuth }) => {
         </div>
         
         <div className="inputs">
-        {
-          SubmittedForm?<p1> Check Email</p1>:
-
           <form onSubmit={onSubmitForm}>
             <InputForm
               img={email_icon}
@@ -122,7 +118,7 @@ const SignupUser = ({ setAuth }) => {
               <button className="submit">Sign Up</button>
             </div>
           </form>
-          }
+          
           <div className="submit-container">
             <p className="text-acc">Already have an account? </p>
             <Link to="/login">Login</Link>

@@ -9,6 +9,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Login from "./Pages/LoginPg/Login/Index.tsx";
 import SignupUser from "./Pages/LoginPg/Signup/Index.tsx";
 import Dashboard from './Pages/Dashboard/Index.tsx';
+import Profile from './Pages/Profile/Index.tsx';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -86,7 +87,7 @@ function App() {
               path="/profile"
               element={
                 isAuthenticated ? (
-                  <Dashboard setAuth={setAuth} />
+                  <Profile />
                 ) : (
                   <Navigate to="/login" />
                 )
