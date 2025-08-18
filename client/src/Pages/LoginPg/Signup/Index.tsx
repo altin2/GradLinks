@@ -3,8 +3,8 @@ import InputForm from "../components/InputForm.tsx";
 import phone_icon from "./Assets/phone-1.png";
 import email_icon from "./Assets/emailicon.png";
 import pass_icon from "./Assets/passicon.png";
-import React, { useState} from "react";
-import { Link} from "react-router-dom";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 const SignupUser = ({ setAuth }) => {
   const [inputs, setInputs] = useState({
@@ -12,9 +12,11 @@ const SignupUser = ({ setAuth }) => {
     password: "",
     phonenumber: "",
   });
+  const [isSubmit, setIsSubmit] = useState(false);
   const { email, password, phonenumber } = inputs;
 
-  const onChange = (e) =>setInputs({ ...inputs, [e.target.name]: e.target.value });
+  const onChange = (e) =>
+    setInputs({ ...inputs, [e.target.name]: e.target.value });
 
   const onSubmitForm = async (e) => {
     e.preventDefault();
@@ -22,7 +24,6 @@ const SignupUser = ({ setAuth }) => {
       const body = { email, pass: password, phonenumber };
       //password verification using regular expressions
       var isValid = true;
-      
 
       if (password.length === 0) {
         toast.error("Cannot leave password blank");
@@ -48,8 +49,7 @@ const SignupUser = ({ setAuth }) => {
           toast.error("Pass must contain at least 1 special symbol");
           isValid = false;
         }
-      } 
-      
+      }
 
       if (isValid) {
         //Add all inputs to DB
@@ -61,14 +61,10 @@ const SignupUser = ({ setAuth }) => {
           body: JSON.stringify(body),
         });
 
-
-
         const parseRes = await response.json();
 
         if (!!parseRes) {
-          localStorage.setItem("token", parseRes);
-          toast.success("Registered, verify with email");
-          window.location.reload()
+          setIsSubmit(true);
         } else {
           setAuth(false);
           toast.error(parseRes);
@@ -78,7 +74,7 @@ const SignupUser = ({ setAuth }) => {
       console.error(err.message);
     }
   };
-  
+
   return (
     <>
       <div className="bg-container"></div>
@@ -87,38 +83,44 @@ const SignupUser = ({ setAuth }) => {
           <div className="text">Sign Up Page</div>
           <div className="underline"></div>
         </div>
-        
+
         <div className="inputs">
-          <form onSubmit={onSubmitForm}>
-            <InputForm
-              img={email_icon}
-              onChange={(e) => onChange(e)}
-              name="email"
-              value={email}
-              type="text"
-              placeholder="Email"
-            />
-            <InputForm
-              img={phone_icon}
-              onChange={(e) => onChange(e)}
-              name="phonenumber"
-              value={phonenumber}
-              placeholder="Phone number"
-              type={null}
-            />
-            <InputForm
-              img={pass_icon}
-              onChange={(e) => onChange(e)}
-              name="password"
-              value={password}
-              type="password"
-              placeholder="Password"
-            />
-            <div className="submit-container">
-              <button className="submit">Sign Up</button>
-            </div>
-          </form>
-          
+          {isSubmit ? (
+            <h4 className="text-center sticky-top">
+              Registered! Verify with email.
+            </h4>
+          ) : (
+            <form onSubmit={onSubmitForm}>
+              <InputForm
+                img={email_icon}
+                onChange={(e) => onChange(e)}
+                name="email"
+                value={email}
+                type="text"
+                placeholder="Email"
+              />
+              <InputForm
+                img={phone_icon}
+                onChange={(e) => onChange(e)}
+                name="phonenumber"
+                value={phonenumber}
+                placeholder="Phone number"
+                type={null}
+              />
+              <InputForm
+                img={pass_icon}
+                onChange={(e) => onChange(e)}
+                name="password"
+                value={password}
+                type="password"
+                placeholder="Password"
+              />
+              <div className="submit-container">
+                <button className="submit">Sign Up</button>
+              </div>
+            </form>
+          )}
+
           <div className="submit-container">
             <p className="text-acc">Already have an account? </p>
             <Link to="/login">Login</Link>

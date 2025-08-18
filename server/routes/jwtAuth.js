@@ -35,8 +35,9 @@ router.post("/signup",validinfo,async(req,res)=>{
 
         if (error2) {
             console.error("In jwtAuth.js: ",error2)
-        return res.status(500).send(error2);
+          return res.status(500).send(error2);
         }
+        res.json(data2)
     } catch (err) {
         console.error(`in jwtAuth.js: ${err.message}`);
         res.status(500).send("Server Error")
