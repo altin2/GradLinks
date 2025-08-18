@@ -13,8 +13,6 @@ export default function Profile() {
       label: "Back To Dashboard",
       onClick: () => navigate("/dashboard"),
     },
-    // { icon: <LinktoPgBtn  size={60}/>, label: 'Profile', onClick: () => alert('Profile!') },
-    // { icon: <LinktoPgBtn  size={70}/>, label: 'Settings', onClick: () => alert('Settings!') },
   ];
   const [inputs, setInputs] = useState({
     firstname: "",

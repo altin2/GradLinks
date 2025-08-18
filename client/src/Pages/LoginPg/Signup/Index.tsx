@@ -62,8 +62,7 @@ const SignupUser = ({ setAuth }) => {
         });
 
         const parseRes = await response.json();
-
-        if (!!parseRes) {
+        if (!!parseRes && typeof parseRes !== "string") {
           setIsSubmit(true);
         } else {
           setAuth(false);
@@ -104,7 +103,7 @@ const SignupUser = ({ setAuth }) => {
                 onChange={(e) => onChange(e)}
                 name="phonenumber"
                 value={phonenumber}
-                placeholder="Phone number"
+                placeholder="Phone number (optional)"
                 type={null}
               />
               <InputForm

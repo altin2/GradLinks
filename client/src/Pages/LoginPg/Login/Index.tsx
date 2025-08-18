@@ -6,7 +6,6 @@ import email_icon from "./Assets/emailicon.png";
 import pass_icon from "./Assets/passicon.png";
 import InputForm from "../components/InputForm.tsx";
 
-
 const Login = ({ setAuth }) => {
   const [inputs, setInputs] = useState({
     email: "",
@@ -32,20 +31,22 @@ const Login = ({ setAuth }) => {
       });
 
       const parseRes = await response.json();
-      if (!!parseRes[0]) {
+      console.log(parseRes);
+      //Checks for errors
+      if (!!parseRes[0] && typeof parseRes !== "string") {
         localStorage.setItem("access_token", parseRes[0]);
         localStorage.setItem("refresh_token", parseRes[1]);
-        setAuth(true)
+        setAuth(true);
         toast.success("Logged in Successfully");
       } else {
         setAuth(false);
         toast.error(parseRes);
       }
     } catch (err) {
-      console.error(err.message);
+      console.error(`In Login: ${err.message}`);
     }
   };
-  
+
   return (
     <>
       <div className="bg-container"></div>

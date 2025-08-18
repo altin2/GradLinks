@@ -18,7 +18,7 @@ router.post("/signup",validinfo,async(req,res)=>{
             res.status(500).send(error)
         }
         if (data.length>0){
-            return res.status(401).send("User already exists")
+            return res.status(401).json("Email already in use")
         }
 
         //Add users to the table
@@ -28,7 +28,7 @@ router.post("/signup",validinfo,async(req,res)=>{
             options: {
               data: {
                 
-                phonenumber:phonenumber
+                phone:phonenumber
               },
             },
           })
@@ -37,7 +37,7 @@ router.post("/signup",validinfo,async(req,res)=>{
             console.error("In jwtAuth.js: ",error2)
           return res.status(500).send(error2);
         }
-        res.json(data2)
+        res.json([data2])
     } catch (err) {
         console.error(`in jwtAuth.js: ${err.message}`);
         res.status(500).send("Server Error")
@@ -48,7 +48,11 @@ router.post("/signup",validinfo,async(req,res)=>{
 
 router.post("/login",validinfo, async(req,res) =>{
     try {
+        
+        
         const {email,pass} = req.body
+        console.log(email)
+        console.log(pass)
         const { data, error } = await supabase.auth.signInWithPassword({
             email: email,
             password: pass,
@@ -57,17 +61,16 @@ router.post("/login",validinfo, async(req,res) =>{
             return res.status(401).json("Invalid Credential");
         }
         res.json([data.session.access_token,data.session.refresh_token])
+        
+        
     } catch (err) {
-        console.error(`in jwtAuth.js: ${err.message}`);
+        //console.error(`in jwtAuth.js: ${err.message}`);
         res.status(500).send("Server Error")
     }
 })
 
 
-router.post("/logout", async(req,res)=>{
-  const{error}=await supabase.auth.signOut()
-  if (error) throw error;
-})
+
 router.post("/verify", async(req,res)=>{
   try {
     

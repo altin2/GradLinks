@@ -12,7 +12,7 @@ router.get("/",async(req,res)=>{
     const { data: { user }, error } = await supabase.auth.getUser(token);
     //Token is out of time
     if (error) {
-      console.error(error.message);
+      console.error(`In dashboard: ${error.message}`)
       return res.json("session over");
     }
 
@@ -25,7 +25,7 @@ router.get("/",async(req,res)=>{
         
         
     } catch (err) {
-        console.error(err.message)
+        console.error(`In dashboard: ${err.message}`)
         res.status(500).json(err)
     }
 })
