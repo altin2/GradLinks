@@ -1,12 +1,15 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import DashbordBtn from "../Dashboard/components/LinktoPgBtn";
 import Dock from "../universal_components/Dock";
 import { useNavigate } from "react-router-dom";
 import "./Index.css";
+import { toast } from "react-toastify";
 import dashboardimg from "../universal_components/universal_assets/dashboard.svg";
-import InputForm from "../LoginPg/components/InputForm.tsx";
+import { GradForm,EmployerForm } from "./components/FormTypes.tsx";
+import { returnGradStatus } from "../../functions/routes.tsx";
 export default function Profile() {
   const navigate = useNavigate();
+  const [gradStatus,setGradStatus] = useState(false)
   const items = [
     {
       icon: <DashbordBtn size={50} img_path={dashboardimg} />,
@@ -14,20 +17,14 @@ export default function Profile() {
       onClick: () => navigate("/dashboard"),
     },
   ];
-  const [inputs, setInputs] = useState({
-    firstname: "",
-    lastname: "",
-    bio: "",
-  });
-
-  const { firstname, lastname, bio } = inputs;
-
-  const onChange = (e) =>
-    setInputs({ ...inputs, [e.target.name]: e.target.value });
-  const handleUpdate = (e) => {
-    e.preventDefault();
-    // your update logic here
-  };
+  useEffect(() => {
+    const fetchGradStatus = async () => {
+      const profileName = await returnGradStatus();
+      setGradStatus(profileName);
+    };
+    fetchGradStatus();
+  }, [])
+  console.log(gradStatus)
 
   return (
     <>
@@ -40,37 +37,9 @@ export default function Profile() {
         />
       </div>
       <div className="form-container">
-        <form onSubmit={handleUpdate}>
-          <InputForm
-            img={null}
-            onChange={(e) => onChange(e)}
-            name="email"
-            value={firstname}
-            type="text"
-            placeholder="First Name"
-          />
-          <InputForm
-            img={null}
-            onChange={(e) => onChange(e)}
-            name="password"
-            value={lastname}
-            type="password"
-            placeholder="Last Name"
-          />
-          <InputForm
-            img={null}
-            onChange={(e) => onChange(e)}
-            name="password"
-            value={bio}
-            type="password"
-            placeholder="Bio"
-          />
-
-          <div className="submit-container">
-            <button className="submit">Update</button>
-          </div>
-        </form>
+        {gradStatus===true?<GradForm/>:<EmployerForm/>}
       </div>
     </>
   );
 }
+

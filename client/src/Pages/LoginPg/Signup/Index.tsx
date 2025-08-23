@@ -6,7 +6,9 @@ import pass_icon from "./Assets/passicon.png";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import { passCheck } from "../../../functions/routes.tsx";
 const SignupUser = ({ setAuth }) => {
+  const [isGrad, setIsGrad]=useState(false)
   const [inputs, setInputs] = useState({
     email: "",
     password: "",
@@ -14,43 +16,20 @@ const SignupUser = ({ setAuth }) => {
   });
   const [isSubmit, setIsSubmit] = useState(false);
   const { email, password, phonenumber } = inputs;
-
+  const onGradChange =()=> {
+    setIsGrad(!isGrad)
+    console.log(`Changed grad to ${isGrad}!`)
+}
   const onChange = (e) =>
     setInputs({ ...inputs, [e.target.name]: e.target.value });
 
   const onSubmitForm = async (e) => {
     e.preventDefault();
     try {
-      const body = { email, pass: password, phonenumber };
+      const body = { email, pass: password, phonenumber,isGrad };
       //password verification using regular expressions
-      var isValid = true;
-
-      if (password.length === 0) {
-        toast.error("Cannot leave password blank");
-        isValid = false;
-      } else {
-        if (password.length < 7) {
-          toast.error("Pass must be more than 7 characters");
-          isValid = false;
-        }
-        if (![...password].some((char) => /[A-Z]/.test(char))) {
-          toast.error("Pass must contain at least 1 uppercase letter");
-          isValid = false;
-        }
-        if (![...password].some((char) => /[a-z]/.test(char))) {
-          toast.error("Pass must contain at least 1 lowercase letter");
-          isValid = false;
-        }
-        if (
-          ![...password].some((char) =>
-            /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(char)
-          )
-        ) {
-          toast.error("Pass must contain at least 1 special symbol");
-          isValid = false;
-        }
-      }
-
+      const isValid = passCheck(password);
+      
       if (isValid) {
         //Add all inputs to DB
         const response = await fetch("http://localhost:5000/auth/signup", {
@@ -89,6 +68,8 @@ const SignupUser = ({ setAuth }) => {
               Registered! Verify with email.
             </h4>
           ) : (
+            <>
+            
             <form onSubmit={onSubmitForm}>
               <InputForm
                 img={email_icon}
@@ -114,10 +95,15 @@ const SignupUser = ({ setAuth }) => {
                 type="password"
                 placeholder="Password"
               />
+              <div onChange={()=>onGradChange()}> 
+            <input type='radio' value="Employer" name="role" defaultChecked/> Employer
+            <input type='radio' value="Graduate" name="role"/> Graduate
+            </div>
               <div className="submit-container">
                 <button className="submit">Sign Up</button>
               </div>
             </form>
+            </>
           )}
 
           <div className="submit-container">

@@ -13,7 +13,7 @@ const Login = ({ setAuth }) => {
   });
 
   const { email, password } = inputs;
-
+  
   const onChange = (e) =>
     setInputs({ ...inputs, [e.target.name]: e.target.value });
 
@@ -31,7 +31,6 @@ const Login = ({ setAuth }) => {
       });
 
       const parseRes = await response.json();
-      console.log(parseRes);
       //Checks for errors
       if (!!parseRes[0] && typeof parseRes !== "string") {
         localStorage.setItem("access_token", parseRes[0]);
@@ -56,6 +55,8 @@ const Login = ({ setAuth }) => {
           <div className="underline"></div>
         </div>
         <div className="inputs">
+          
+ 
           <form onSubmit={onSubmitForm}>
             <InputForm
               img={email_icon}

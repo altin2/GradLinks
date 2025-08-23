@@ -17,7 +17,7 @@ app.use((err, req, res, next) => {
 // Register and login routes
 app.use("/auth", require("./routes/jwtAuth"));
 app.use("/dashboard", require("./routes/dashboard"));
-
+app.use("/profile", require("./routes/profile"));
 // Health check endpoint
 app.get("/health", (req, res) => {
   res.json({ status: "Server is running" });

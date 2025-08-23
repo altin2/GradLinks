@@ -22,12 +22,13 @@ function App() {
       });
 
       const parseRes = await res.json();
-      console.log(parseRes)
       setIsAuthenticated(parseRes);
     } catch (err) {
       console.error(err.message);
     }
   };
+  
+  
 
   useEffect(() => {
     checkAuthenticated();
