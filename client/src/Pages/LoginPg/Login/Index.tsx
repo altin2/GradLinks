@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import email_icon from "./Assets/emailicon.png";
 import pass_icon from "./Assets/passicon.png";
 import InputForm from "../components/InputForm.tsx";
-
+import supabase from "../../../supabase-client.js";
 const Login = ({ setAuth }) => {
   const [inputs, setInputs] = useState({
     email: "",
@@ -20,27 +20,24 @@ const Login = ({ setAuth }) => {
   const onSubmitForm = async (e) => {
     e.preventDefault(); // Prevent form from refreshing the page
     try {
-      const body = { email, pass: password };
-
-      const response = await fetch("http://localhost:5000/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-type": "application/json",
-        },
-        body: JSON.stringify(body),
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: email,
+        password: password,
       });
-
-      const parseRes = await response.json();
-      //Checks for errors
-      if (!!parseRes[0] && typeof parseRes !== "string") {
-        localStorage.setItem("access_token", parseRes[0]);
-        localStorage.setItem("refresh_token", parseRes[1]);
-        setAuth(true);
-        toast.success("Logged in Successfully");
-      } else {
+  
+      if (error) {
+        toast.error(error.message);
         setAuth(false);
-        toast.error(parseRes);
+        return;
       }
+  
+      // Supabase automatically saves tokens in localStorage
+      setAuth(true);
+      toast.success("Logged in Successfully");
+      supabase.auth.onAuthStateChange((event, session) => {
+        console.log("Auth event:", event, session);
+      });
+      
     } catch (err) {
       console.error(`In Login: ${err.message}`);
     }

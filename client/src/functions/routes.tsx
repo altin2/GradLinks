@@ -1,4 +1,4 @@
-
+import supabase from "../supabase-client";
 import { toast } from "react-toastify";
 //logs user out
 export function logout() {
@@ -15,9 +15,10 @@ export function logout() {
 //returns email for the dashboard 
 export async function getProfile() {
     try {
+      const { data: { session } } = await supabase.auth.getSession();
       const res = await fetch("http://localhost:5000/dashboard", {
         method: "GET",
-        headers: { Authorization: `Bearer ${localStorage.access_token}` },
+        headers: { Authorization: `Bearer ${session?.access_token}` },
       });
       //only returns email or nothing
       const parseData = await res.json();
@@ -61,17 +62,5 @@ export function passCheck(password:string){
       }
     return true
 }
-//checks to see what bio options profile should display
-export async function returnGradStatus(){
-    try {
-        const res = await fetch("http://localhost:5000/profile", {
-            method: "GET",
-            headers: { Authorization: `Bearer ${localStorage.access_token}` },
-          });
-          const parseData = await res.json();
-        return parseData
-    } catch (err) {
-        console.error(err.message);
-    }
-}
+
   

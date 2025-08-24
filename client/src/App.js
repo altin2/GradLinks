@@ -10,23 +10,28 @@ import Login from "./Pages/LoginPg/Login/Index.tsx";
 import SignupUser from "./Pages/LoginPg/Signup/Index.tsx";
 import Dashboard from './Pages/Dashboard/Index.tsx';
 import Profile from './Pages/Profile/Index.tsx';
+import supabase from './supabase-client.js';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const checkAuthenticated = async () => {
     try {
+      const { data: { session } } = await supabase.auth.getSession();
       const res = await fetch("http://localhost:5000/auth/verify", {
         method: "POST",
-        headers: { jwt_token: localStorage.access_token },
+        headers: {
+          Authorization: `Bearer ${session.access_token}`,
+        },
       });
-
+  
       const parseRes = await res.json();
       setIsAuthenticated(parseRes);
     } catch (err) {
       console.error(err.message);
     }
   };
+  
   
   
 

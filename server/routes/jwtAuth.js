@@ -13,22 +13,40 @@ router.post("/signup",validinfo,async(req,res)=>{
     res.status(500).send(error) } 
     if (data.length>0){ return res.status(401).json("Email already in use") }
      //Add users to the table 
-     const { data: data2, error:error2 } = await supabase.auth.signUp({ email: email, password: pass, }) 
+     const { data: data2, error:error2 } = await supabase.auth.signUp({ 
+      email: email, 
+      password: pass,
+      options: {
+        data: {
+          custom_phone: phonenumber,
+          isGrad,
+        }
+      }
+     }
+    ) 
      if (error2) { 
       console.error("In jwtAuth.js: ",error2) 
       return res.status(500).send(error2); 
-    } //Add users to corresponding graduate or employer table
+    }
+    const user = data2.user;
+
+    if (!user) {
+      return res.status(400).json("Signup failed: no user returned");
+    }
+    const uid = user.id
+    
+    //Add users to corresponding graduate or employer table
      if (isGrad){ 
       const {error:error3} = await supabase .
       from("user_grad") 
-      .insert({id:data2.user.id }) 
+      .insert({id:uid}) 
       if (error3) { 
         console.error("In jwtAuth.js: ",error3) 
         return res.status(500).send(error3); } 
       } else{ 
         const {error:error4} = await supabase 
         .from("user_employer") 
-        .insert({id:data2.user.id }) 
+        .insert({id:uid}) 
 
 
         if (error4) { 
@@ -42,50 +60,24 @@ router.post("/signup",validinfo,async(req,res)=>{
           } 
         })
 
-//login route
 
-router.post("/login",validinfo, async(req,res) =>{
-    try {
-        
-        
-        const {email,pass} = req.body
-
-        const { data, error } = await supabase.auth.signInWithPassword({
-            email: email,
-            password: pass,
-          })
-        if (data.user===null) {
-            return res.status(401).json("Invalid Credential");
-        }
-        res.json([data.session.access_token,data.session.refresh_token])
-        
-        
-    } catch (err) {
-        console.error(`in jwtAuth.js: ${err.message}`);
-        res.status(500).send("Server Error")
-    }
-})
 
 
 //verify JWT 
-router.post("/verify", async(req,res)=>{
+router.post("/verify", async (req, res) => {
   try {
-    const token = req.headers.jwt_token;
-    if (typeof token === "string" && token.trim() !== "" && token !== "undefined" && token !== "null") {
-      res.json(true);
-    } else {
-      res.json(false);
-    }
+    const token = req.headers.authorization?.split(" ")[1];
+    if (!token) return res.json(false);
 
-    
-    
+    const { data: { user }, error } = await supabase.auth.getUser(token);
+
+    if (error || !user) return res.json(false);
+    res.json(true); 
   } catch (err) {
     console.error(`in jwtAuth.js: ${err.message}`);
-    res.status(500).send(err)
-    
+    res.json(false);
   }
-})
-
+});
 
 module.exports = router;
 

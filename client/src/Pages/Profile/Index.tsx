@@ -6,7 +6,7 @@ import "./Index.css";
 import { toast } from "react-toastify";
 import dashboardimg from "../universal_components/universal_assets/dashboard.svg";
 import { GradForm,EmployerForm } from "./components/FormTypes.tsx";
-import { returnGradStatus } from "../../functions/routes.tsx";
+import { returnGradStatus} from "./components/functions/ProfileRoutes.tsx";
 export default function Profile() {
   const navigate = useNavigate();
   const [gradStatus,setGradStatus] = useState(false)
@@ -24,7 +24,6 @@ export default function Profile() {
     };
     fetchGradStatus();
   }, [])
-  console.log(gradStatus)
 
   return (
     <>

@@ -9,6 +9,7 @@ import Dock from "../universal_components/Dock.js";
 import "./Index.css";
 import { getProfile,logout } from "../../functions/routes.tsx";
 const Dashboard = ({ setAuth }) => {
+  
   const naviagate = useNavigate();
   const [name, setName] = useState("");
   const items = [
