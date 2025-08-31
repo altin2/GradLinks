@@ -1,0 +1,13 @@
+.notifBackground{
+    align-items: center;
+    font-size: large;
+    font-family: Arial;
+    width:200px;
+    background-color: #b9b9b9;
+    height:auto;
+    border-radius: 19px;
+    margin-top: 20px;
+    margin-left: 20px;
+    text-indent: 20px;
+    object-fit: contain;
+}

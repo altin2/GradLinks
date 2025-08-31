@@ -70,4 +70,51 @@ router.post("/updategradinfo",async(req,res)=>{
     }
     
 })
+
+//GET router from employer info
+router.get("/returnempinfo",async(req,res)=>{
+    try {
+        const token = req.headers.authorization?.split(" ")[1];
+    
+        const { data: { user }} = await supabase.auth.getUser(token);
+        const {data,error} = await supabase
+        .from("user_employer")
+        .select("*")
+        .eq("id",user.id)
+        if(error){
+            console.error(`In profile: ${err.message}`)
+        res.status(500).send({ error: err.message || "Internal server error" });
+        }
+        res.json(data[0])
+    } catch (err) {
+        console.error(`In profile: ${err.message}`)
+        res.status(500).send({ error: err.message || "Internal server error" });
+    }
+})
+//UPDATE operation for user_employer
+router.post("/updateempinfo",async(req,res)=>{
+    try {
+
+        const {company_name,bio} = req.body
+    const token = req.headers.authorization?.split(" ")[1]; 
+    const { data: { user }} = await supabase.auth.getUser(token);
+    const {error} = await supabase
+    .from("user_employer")
+    .update({
+        company_name,
+        bio
+    })
+    .eq("id",user.id)
+    if(error){
+        console.error(`In profile: ${err.message}`)
+    res.status(500).send({ error: err.message || "Internal server error" });
+    }
+    res.json("Success")
+    } catch (err) {
+        console.error(`In profile: ${err.message}`)
+        res.status(500).send({ error: err.message || "Internal server error" });
+    }
+    
+})
+
 module.exports = router;

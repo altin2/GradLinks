@@ -1,7 +1,6 @@
 .top-bar{
   height: 100px;
-  margin:0;
-  width: auto ;
+  width: a1uto ;
   background-color: #555;
   transform: translateX("-50%");
   border-bottom-left-radius: 10px;
@@ -10,16 +9,15 @@
 .submit-container{
   display: flex;
   gap: 30px;
-  margin: 0px auto;
+  margin: 10% auto;
   width: 50%;
 }
 .titletxt{
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 20px;
+  font-size: 25px;
   font-weight: 700;
-  margin-top: 1%;
 }
 
 .submit{

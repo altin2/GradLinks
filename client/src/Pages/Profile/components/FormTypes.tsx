@@ -1,7 +1,8 @@
 import InputForm from "../../LoginPg/components/InputForm.tsx";
 import React, { useState,useEffect } from "react";
-import { returnGradInfo,updateGradInfo } from "./functions/ProfileRoutes.tsx";
+import { returnGradInfo,updateGradInfo,returnEmpInfo,updateEmpInfo } from "./functions/ProfileRoutes.tsx";
 import { toast } from "react-toastify";
+import LargeInputForm from "./LargeInpForm.tsx";
 import"../Index.css"
 export function GradForm(){
   
@@ -38,7 +39,6 @@ export function GradForm(){
       
       const response = await updateGradInfo(body)
       {response==="Success"?toast.success(response):toast.error(response)}
-      // your update logic here
     };
     return(
       <form onSubmit={handleUpdate}>
@@ -103,41 +103,51 @@ export  function EmployerForm(){
       compname: "",
       bio: "",
     });
-  
+    useEffect(() => {
+      const fetchEmpStatus = async () => {
+        const UserEmp = await returnEmpInfo()
+        setInputs(prev => ({
+          ...prev,
+          compname: UserEmp.company_name,
+          bio: UserEmp.bio,
+        }))
+      };
+      fetchEmpStatus();
+      
+    }, [])
     const { compname,bio } = inputs;
   
     const onChange = (e) =>
       setInputs({ ...inputs, [e.target.name]: e.target.value });
     
     
-    const handleUpdate = (e) => {
+    const handleUpdate = async (e) => {
       e.preventDefault();
+      const body = {company_name:compname,bio}
       
-      // your update logic here
+      const response = await updateEmpInfo(body)
+      {response==="Success"?toast.success(response):toast.error(response)}
     };
     return(
       <form onSubmit={handleUpdate}>
-            
+            <h1 className="titletxt">Company name</h1>
             <InputForm
               img={null}
-              onChange={(e) => onChange(e)}
-              name="name"
+              onChange={onChange}
+              name="compname"
               value={compname}
               type="text"
               placeholder="Company Name"
             />
-            <InputForm
-              img={null}
-              onChange={(e) => onChange(e)}
-              name="password"
-              value={bio}
-              type="text"
-              placeholder="Bio"
-            />
-            
-            
-            
-  
+            <h1 className="titletxt">Company Bio</h1>
+            <LargeInputForm 
+            rows='5' 
+            cols='50' 
+            placeholder="Company Bio" 
+            value={bio} 
+            onChange={onChange} 
+            name="bio"/>
+          
             <div className="submit-container">
               <button className="submit">Update</button>
             </div>

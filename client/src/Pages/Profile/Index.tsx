@@ -1,15 +1,20 @@
 import React, { useState,useEffect } from "react";
+
+import { useNavigate } from "react-router-dom";
+
+//Assets
+import dashboardimg from "../universal_components/universal_assets/dashboard.svg";
+
+//Components/Styles
+import { GradForm,EmployerForm } from "./components/FormTypes.tsx";
 import DashbordBtn from "../Dashboard/components/LinktoPgBtn";
 import Dock from "../universal_components/Dock";
-import { useNavigate } from "react-router-dom";
 import "./Index.css";
-import { toast } from "react-toastify";
-import dashboardimg from "../universal_components/universal_assets/dashboard.svg";
-import { GradForm,EmployerForm } from "./components/FormTypes.tsx";
+//Functions
 import { returnGradStatus} from "./components/functions/ProfileRoutes.tsx";
 export default function Profile() {
   const navigate = useNavigate();
-  const [gradStatus,setGradStatus] = useState(false)
+  const [gradStatus,setGradStatus] = useState(null)
   const items = [
     {
       icon: <DashbordBtn size={50} img_path={dashboardimg} />,
@@ -24,7 +29,7 @@ export default function Profile() {
     };
     fetchGradStatus();
   }, [])
-
+  
   return (
     <>
       <div className="top-bar">
@@ -36,7 +41,11 @@ export default function Profile() {
         />
       </div>
       <div className="form-container">
-        {gradStatus===true?<GradForm/>:<EmployerForm/>}
+      {gradStatus === null 
+        ? <h1 className="titletxt">Loading...</h1>
+        : gradStatus === true 
+          ? <GradForm/> 
+          : <EmployerForm/>}
       </div>
     </>
   );

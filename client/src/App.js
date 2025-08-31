@@ -10,7 +10,11 @@ import Login from "./Pages/LoginPg/Login/Index.tsx";
 import SignupUser from "./Pages/LoginPg/Signup/Index.tsx";
 import Dashboard from './Pages/Dashboard/Index.tsx';
 import Profile from './Pages/Profile/Index.tsx';
+import NotifPage from './Pages/Notifications/Index.tsx';
+
+//BaaS client side
 import supabase from './supabase-client.js';
+
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -94,6 +98,16 @@ function App() {
               element={
                 isAuthenticated ? (
                   <Profile />
+                ) : (
+                  <Navigate to="/login" />
+                )
+              }
+            />
+            <Route
+              path="/notifications"
+              element={
+                isAuthenticated ? (
+                  <NotifPage />
                 ) : (
                   <Navigate to="/login" />
                 )
