@@ -21,6 +21,15 @@ export default function Profile() {
       label: "Back To Dashboard",
       onClick: () => navigate("/dashboard"),
     },
+    ...(gradStatus === true
+      ? [
+          {
+            icon: <DashbordBtn size={50} img_path={null} />,
+            label: "To User Bio",
+            onClick: () => navigate("/bio"),
+          },
+        ]
+      : []),
   ];
   useEffect(() => {
     const fetchGradStatus = async () => {

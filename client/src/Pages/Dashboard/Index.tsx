@@ -35,7 +35,7 @@ const Dashboard = ({ setAuth }) => {
       label: "Profile",
       onClick: () => navigate("/profile"),
     },
-    { icon: <DashbordBtn  size={60} img_path={notifLen>0||notifLen!== null?notifcontains:notifempty}/>, label: `${notifLen} unread ${notifLen>1?"notifications":"notification"} `, onClick: () => navigate("/notifications") },
+    { icon: <DashbordBtn  size={60} img_path={notifLen>0&&notifLen!== null?notifcontains:notifempty}/>, label: `${notifLen} unread ${notifLen>1?"notifications":"notification"} `, onClick: () => navigate("/notifications") },
     // { icon: <LinktoPgBtn  size={70}/>, label: 'Settings', onClick: () => alert('Settings!') },
   ];
   useEffect(() => {

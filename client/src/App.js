@@ -11,6 +11,7 @@ import SignupUser from "./Pages/LoginPg/Signup/Index.tsx";
 import Dashboard from './Pages/Dashboard/Index.tsx';
 import Profile from './Pages/Profile/Index.tsx';
 import NotifPage from './Pages/Notifications/Index.tsx';
+import Bio from './Pages/Bio/Index.tsx';
 
 //BaaS client side
 import supabase from './supabase-client.js';
@@ -103,16 +104,26 @@ function App() {
                 )
               }
             />
-            <Route
-              path="/notifications"
-              element={
-                isAuthenticated ? (
-                  <NotifPage />
-                ) : (
-                  <Navigate to="/login" />
-                )
-              }
-            />
+              <Route
+                path="/notifications"
+                element={
+                  isAuthenticated ? (
+                    <NotifPage />
+                  ) : (
+                    <Navigate to="/login" />
+                  )
+                }
+              />
+              <Route
+                path="/bio"
+                element={
+                  isAuthenticated ? (
+                    <Bio />
+                  ) : (
+                    <Navigate to="/login" />
+                  )
+                }
+              />
           </Routes>
         </div>
       </Router>

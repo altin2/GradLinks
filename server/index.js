@@ -19,6 +19,7 @@ app.use((err, req, res, next) => {
 app.use("/auth", require("./routes/jwtAuth"));
 app.use("/dashboard", require("./routes/dashboard"));
 app.use("/profile", require("./routes/profile"));
+app.use("/bio", require("./routes/bio"));
 // Health check endpoint
 app.get("/health", (req, res) => {
   res.json({ status: "Server is running" });

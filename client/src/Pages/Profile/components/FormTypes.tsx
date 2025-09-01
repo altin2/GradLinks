@@ -11,7 +11,6 @@ export function GradForm(){
       lastname: "",
       midname:"",
       age:"",
-      bio: "",
     });
     useEffect(() => {
       const fetchGradStatus = async () => {
@@ -27,7 +26,7 @@ export function GradForm(){
       fetchGradStatus();
       
     }, [])
-    const { firstname, lastname,midname,age, bio } = inputs;
+    const { firstname, lastname,midname,age} = inputs;
   
     const onChange = (e) =>
       setInputs({ ...inputs, [e.target.name]: e.target.value });
@@ -77,15 +76,6 @@ export function GradForm(){
         value={age}
         type="number"
         placeholder="Age"
-      />
-      <h1 className="titletxt">Bio</h1>
-      <InputForm
-        img={null}
-        onChange={onChange}
-        name="bio"
-        value={bio}
-        type="text"
-        placeholder="Bio"
       />
             
             
