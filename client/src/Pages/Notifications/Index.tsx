@@ -1,26 +1,15 @@
 import React, { useEffect, useState } from "react";
-
+import { RevealButtonProps } from "../Dashboard/components/NoticeBoardGraduate";
 import { useNavigate } from "react-router-dom";
 //Components/Styles
-import Dock from "../universal_components/Dock";
-import DashbordBtn from "../Dashboard/components/LinktoPgBtn";
 import NotificationComponent from "./components/Notification";
 //Routes/Functions
 import { ReturnUserNotifs } from "./components/functions/NotificationRoutes";
 //Assets
-import dashboardimg from "../universal_components/universal_assets/dashboard.svg";
 import { Notification } from "./components/functions/NotificationRoutes";
 
 export default function NotifPage() {
-  const navigate = useNavigate();
   const [notifications, setNotifications] = useState<Notification[]>([]);
-  const items = [
-    {
-      icon: <DashbordBtn size={50} img_path={dashboardimg} />,
-      label: "Back To Dashboard",
-      onClick: () => navigate("/dashboard"),
-    },
-  ];
   useEffect(() => {
     const fetchNotifs = async () => {
       const notifs = await ReturnUserNotifs();
@@ -29,16 +18,8 @@ export default function NotifPage() {
     fetchNotifs();
   }, []);
   return (
-    <>
-      {/* <div className="top-bar">
-        <Dock
-          items={items}
-          panelHeight={68}
-          baseItemSize={50}
-          magnification={70}
-        />
-      </div> */}
-      <div>
+    <><RevealNotifButton>
+        
         {notifications === null ? (
           <p>Loading....</p>
         ) : (
@@ -46,7 +27,30 @@ export default function NotifPage() {
             <NotificationComponent {...notification} />
           ))
         )}
-      </div>
+        
+      </RevealNotifButton>
     </>
   );
+}
+function RevealNotifButton({ children }: RevealButtonProps) {
+  const [revealed, setRevealed] = useState(false)
+
+  const toggleReveal = () => setRevealed(!revealed)
+
+  return (
+    <div className="notif-reveal-container">
+  
+  <button
+    id={revealed ? "reveal-notif-btn-bottom" : "reveal-notif-btn"}
+    onClick={toggleReveal}
+  >
+    {revealed ? "↑" : "↓"}
+  </button>
+  <div className={`notif-container reveal-content ${revealed?"show":""}`}>
+    {children}
+  </div>
+</div>
+
+
+  )
 }

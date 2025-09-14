@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, ReactNode } from "react";
 
 import "../Index.css";
 //Components
@@ -6,7 +6,9 @@ import supabase from "../../../supabase-client";
 //Functions
 import { RetrieveRelevantNotices } from "./functions/NoticeBoardFunctions";
 import { returnGradInfo } from "../../Profile/components/functions/ProfileRoutes";
-
+export interface RevealButtonProps {
+  children: ReactNode;  // children can be any valid React content
+}
 export interface Grad {
   id: string;
   first_name: string;
@@ -45,8 +47,8 @@ export function NoticeBoardGrad() {
 
     fetchNotices();
   }, [grad]);
-  const renderNotices = (arr) => {
-    return arr.map((notice, idx) => {
+  const renderNotices = (arr:any) => {
+    return arr.map((notice:any, idx:number) => {
       //If there's an image ascosiated with the post, return it
       const { data } = supabase.storage
         .from("user_post_images")
@@ -55,26 +57,28 @@ export function NoticeBoardGrad() {
       if (data) {
         source = data.publicUrl;
       }
+
+      
       return (
         <>
-          <div key={idx} className="notice-container">
+          <div key={idx} className="flex-container">
+            <div className="notice-container glass-card">
             <div className="title">{notice.Title}</div>
-            <div className="flex-container">
-              <div className="img-container">
+            <div className="img-container">
                 {source === "" ? <></> : <img src={source} />}
               </div>
-              <button className="reveal-btn">{"->>"}</button>
             </div>
-            {/* <div className="mid-container">
+          <RevealButton>
+            <div className="desc-container">
+            <div className="mid-container">
               <div className="message">{notice.message}</div>
             </div>
-            <div className="desc-container">
-              <div className="title">Prerequisites (scroll)</div>
+              <div className="title">Prerequisites</div>
               <div className="message">{notice.requiredDegree}</div>
               {notice.required_skills.length > 0 ? (
                 <>
                   <div className="subheader-title">Required skills</div>
-                  {notice.required_skills.map((skill, idx2) => {
+                  {notice.required_skills.map((skill:any, idx2:number) => {
                     return (
                       <div className="row" key={idx2}>
                         <div className="bullet-point" />
@@ -96,7 +100,9 @@ export function NoticeBoardGrad() {
                 <div className="bullet-point" />
                 <div>{notice.required_work_years}</div>
               </div>
-            </div> */}
+            </div>
+            </RevealButton>
+            
           </div>
         </>
       );
@@ -111,4 +117,27 @@ export function NoticeBoardGrad() {
       )}
     </>
   );
+}
+
+function RevealButton({ children }: RevealButtonProps) {
+  const [revealed, setRevealed] = useState(false)
+
+  const toggleReveal = () => setRevealed(!revealed)
+
+  return (
+    <div className="reveal-container">
+  
+  <button
+    id={revealed ? "reveal-btn-right" : "reveal-btn"}
+    onClick={toggleReveal}
+  >
+    {revealed ? "<--" : "-->"}
+  </button>
+  <div className={`desc-container ${revealed ? "show" : "hide"} glass-card`}>
+    {children}
+  </div>
+</div>
+
+
+  )
 }

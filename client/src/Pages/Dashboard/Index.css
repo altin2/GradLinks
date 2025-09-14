@@ -1,15 +1,14 @@
 .text-type {
   display: inline-block;
   white-space: pre-wrap;
-  margin: 1rem;
-  left: 50%;
-  transform: translateX(-100%);
   transform: translateY(50%);
-  font-size:20px
+  font-size:25px;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  
 }
 
 .text-type__cursor {
-  margin-left: 0.25rem;
+  color: white;
   display: inline-block;
   opacity: 1;
 }
@@ -21,15 +20,30 @@
   justify-content: center;
 
 }
-.top-bar{
-  max-height: 100px;
-  margin:0;
+.bar-top{
+  position: fixed;
+  left: 50%;
+  max-height: 50px;
   width: auto ;
-  background-color: #555;
-  transform: translateX("-50%");
+  color:white;
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
+  z-index: 5;
 }
+.bar-top-visible{
+  transform: translateY(0);
+  transition: 0.1s ease-in;
+}
+.bar-top-hidden{
+  transform: translateY(-200%);
+  transition: 0.1s ease-out;
+}
+.top-left{
+  position: absolute;
+  left:30px;
+  top:20px;
+}
+
 .post-btn{
   
   background: rgb(193, 1, 193);
@@ -38,28 +52,27 @@
   margin-left:25px;
 }
 .notice-container{
-  background:#B9B6B6;
+  color:white;
+  background-color: #292929;
   width: 400px;
-  height: 452px;
-  border-radius: 19px;
-  outline: 3px;
-  outline-style: solid;
-  outline-color: black;
+  height: auto;
+  border-radius: 20px;
   margin-top: 25px;
   margin-bottom: 25px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  z-index: 1;
 }
 .img-container{
-  background: #bcbcbc;
   width: 400px;
   height:400px;
-  border-radius: 19px;
+  border-bottom-left-radius: 19px;
+  border-bottom-right-radius: 19px;
   overflow: hidden; /* hides any overflow from the image */
-  outline: 3px;
-  outline-style: solid;
-  outline-color: black;
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 2;
+  box-shadow: 0 -4px 0 #ffffff;
 }
 .img-container img {
   width: 100%;
@@ -76,26 +89,70 @@
   text-align: center;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   font-size: 20px;
-  margin-top: 5px;
-  margin-bottom: 17px;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
-.reveal-btn{
-  width:79px;
-  height:307px;
-  background-color: #D9D9D9;
-  outline: 3px;
-  outline-style: solid;
-  outline-color: black;
+.reveal-container {
+  margin-top: 23%;
+  position: relative; 
+}
+
+.desc-container {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  position: absolute;
+  margin-right:2px;
+  top: 0;
+  left: 0;
+  height: 362px;
+  width: 300px;
+  overflow: auto;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+  transition: transform 0.5s ease;
+  scrollbar-width: none;
+  color:white;
+  padding: 4px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  background-color: #292929;
+  z-index: 0;
+}
+.desc-container.hide {
+  transform: translateX(-100%);  /* slide off screen */
+}
+.desc-container.show {
+  transform: translateX(0);
+}
+
+#reveal-btn{
+  margin-top: 20px;
+  width: 79px;
+  height: 325px;
+  background-color: #292929;
+  color: white;
   border-top-right-radius: 40px;
   border-bottom-right-radius: 40px;
-  margin-top:40px;
+  transition: margin 0.45s ease;
+  outline-style: none;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
+#reveal-btn-right{
+  margin-top: 20px;
+  width: 79px;
+  height: 325px;
+  background-color: #292929;
+  color: white;
+  border-top-right-radius: 40px;
+  border-bottom-right-radius: 40px;
+  margin-left: 380%;
+  transition: margin 0.45s ease;
+  outline-style: none;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
 .board-container{
-  justify-content: center;
-  display: grid;
-  overflow: scroll;
-  scrollbar-width: none;
-  background: rgb(209, 209, 209);
+  position: absolute;
+  top:10%;
+  left:40%;
   outline: 5px black;
   border-radius: 30px;
 }

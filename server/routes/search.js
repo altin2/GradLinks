@@ -66,44 +66,49 @@ function SortByRelevance(dict){
 
 
 router.post("/", async (req, res) => {
-  try {
-    const { WorkParam, SkillParam, DegreeParam,UniParam } = req.body;
-    
-    WorkExpressions = WorkParam.split(" ")
-    const { data, error } = await supabase
-      .from("user_grad")
-      .select("*")
-      .in("degree_type", DegreeParam); 
-    var dictionary={}
-    //Assigning matching values with an Rscore and their respective object
-    for (let i=0; i<data.length;i++)
-    {
-        const userId = data[i].id; 
-        dictionary[userId] = {
-            record: data[i],  // the actual row from Supabase
-            score: 0          // initial Rscore
-        };
-        //Checks the amount of skills that are matching between the employer and graduate
-        dictionary[userId].score+= ReturnNumberofMatchingItems(data[i].skills_desc,SkillParam)
-        dictionary[userId].score+= 3*ReturnNumberofMatchingItems(Array(data[i].attended_uni),UniParam)
+    try {
+      const { WorkParam, SkillParam, DegreeParam, UniParam } = req.body;
+  
+      const { data, error } = await supabase
+        .from("user_grad")
+        .select("*")
+        .in("degree_type", DegreeParam);
+  
+      if (error) {
+        console.error("Supabase error:", error);
+        return res.status(500).json({ error: error.message });
+      }
+  
+      var dictionary = {};
+      const WorkExpressions = WorkParam.split(" ");
+  
+      for (let i = 0; i < data.length; i++) {
+        const userId = data[i].id;
+        dictionary[userId] = { record: data[i], score: 0 };
+  
+        dictionary[userId].score += ReturnNumberofMatchingItems(data[i].skills_desc, SkillParam);
+        dictionary[userId].score += 3 * ReturnNumberofMatchingItems([data[i].attended_uni], UniParam);
+  
         let param2 = WorkExpressions.length > 2 ? parseInt(WorkExpressions[2]) : undefined;
-        dictionary[userId].score+=ReturnWorkYearScore(WorkExpressions[0],parseInt(WorkExpressions[1]),param2,data[i].work_years)
+        dictionary[userId].score += ReturnWorkYearScore(
+          WorkExpressions[0],
+          parseInt(WorkExpressions[1]),
+          param2,
+          data[i].work_years
+        );
+      }
+  
+      const sorted = SortByRelevance(dictionary);
+      const prioritylist = sorted.slice(0, 10);
+      const returnlist = prioritylist.map((entry) => entry.record);
+  
+      return res.json(returnlist); 
+    } catch (err) {
+      console.error(err);
+      return res.status(500).send(err);
     }
-    const sorted = SortByRelevance(dictionary)
-    const prioritylist = sorted.slice(0,10)
-    const returnlist = prioritylist.map((entry)=> entry.record)
-
-
-    if (error) {
-      console.error("Supabase error:", error);
-      return res.status(500).json({ error: error.message });
-    }
-    res.json(returnlist);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send(err);
-  }
-});
+  });
+  
 
 router.get("/returnunis",async(req,res)=>{
     try {

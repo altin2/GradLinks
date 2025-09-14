@@ -11,21 +11,21 @@ import { NoticeBoardGrad } from "./components/NoticeBoardGraduate.tsx";
 import { NoticeBoardEmployer } from "./components/NoticeBoardEmployer.tsx";
 import NotifPage from "../Notifications/Index.tsx";
 //Assets
-import emptypfp from "../universal_components/universal_assets/emptypfp.svg";
 import logoutimg from "../universal_components/universal_assets/logout.svg";
-import notifempty from "../universal_components/universal_assets/notification.svg";
-import notifcontains from "../universal_components/universal_assets/notificationFull.svg";
 import searchTalent from "../universal_components/universal_assets/searchTalent.svg";
 //Styles and routes
 import "./Index.css";
 import { getProfile, logout } from "../../functions/routes.tsx";
 import { ReturnUserNotifs } from "../Notifications/components/functions/NotificationRoutes.tsx";
 import { returnGradStatus } from "../Profile/components/functions/ProfileRoutes.tsx";
-const Dashboard = ({ setAuth }) => {
+import DarkVeil from "../universal_components/DarkVeil.tsx";
+const Dashboard = () => {
   const navigate = useNavigate();
 
   const [name, setName] = useState("");
   const [notifLen, setNotifLen] = useState(0);
+  const [show,setShow] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
   const [gradStatus, setGradStatus] = useState(null);
   const [pfpUrl, setPfpUrl] = useState<any>(null);
   const fetchPFP = async () => {
@@ -36,7 +36,6 @@ const Dashboard = ({ setAuth }) => {
       .from("user_pfps")
       .getPublicUrl(`Public/${session?.user.id}`);
     if (data) {
-      console.log(data.publicUrl);
       return data.publicUrl;
     } else {
       return null;
@@ -53,20 +52,6 @@ const Dashboard = ({ setAuth }) => {
       label: "Profile",
       onClick: () => navigate("/profile"),
     },
-    // {
-    //   icon: (
-    //     <DashbordBtn
-    //       size={60}
-    //       img_path={
-    //         notifLen > 0 && notifLen !== null ? notifcontains : notifempty
-    //       }
-    //     />
-    //   ),
-    //   label: `${notifLen} unread ${
-    //     notifLen > 1 ? "notifications" : "notification"
-    //   } `,
-    //   onClick: () => navigate("/notifications"),
-    // },
     ...(gradStatus === false
       ? [
           {
@@ -77,6 +62,21 @@ const Dashboard = ({ setAuth }) => {
         ]
       : []),
   ];
+  const controlNavbar = () => {
+    if (window.scrollY > lastScrollY) {
+      setShow(false);
+    } else {
+      setShow(true);
+    }
+    setLastScrollY(window.scrollY);
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", controlNavbar);
+    return () => {
+      window.removeEventListener("scroll", controlNavbar);
+    };
+  }, [lastScrollY]);
   useEffect(() => {
     const fetchProfile = async () => {
       try {
@@ -102,25 +102,42 @@ const Dashboard = ({ setAuth }) => {
   }, []);
 
   return (
-    <>
-      <div className="top-bar">
-        <div>
-          <TextType
+    <><div
+  style={{
+    position: "fixed",
+    top: 0,
+    left: 0,
+    width: "100vw",
+    height: "100vh",
+    zIndex: -2,
+    pointerEvents: "none"
+  }}
+>
+  <DarkVeil />
+</div>
+<div className="top-left">
+<TextType
             text={[`Welcome ${name}`]}
             typingSpeed={75}
             pauseDuration={1500}
             showCursor={true}
             cursorCharacter="|"
+            textColors={["white"]}
+            
           />
+</div>
+
+      <div className={`bar-top ${show?"bar-top-visible":"bar-top-hidden"}`}>
+          
           <Dock
             items={items}
             panelHeight={68}
             baseItemSize={50}
             magnification={70}
           />
-        </div>
+          
       </div>
-      {/* <NotifPage /> */}
+      <NotifPage />
       <div>
         {gradStatus === null ? (
           <div>Loading...</div>
@@ -130,6 +147,8 @@ const Dashboard = ({ setAuth }) => {
           <NoticeBoardEmployer />
         )}
       </div>
+      
+
     </>
   );
 };
