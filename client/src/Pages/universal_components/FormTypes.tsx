@@ -1,52 +1,95 @@
 import React from "react";
-import { useState,useEffect } from "react";
-import "./FormTypeStyle.css"
-export default function DegreeType({defaultValue}){
-    
-    return(
-        <>
-        <fieldset>
-  <select class="form-control dropdown" id="education" name="education">
-    <option value="" selected={defaultValue===""||defaultValue===null?"selected":""} disabled="disabled">-- select one --</option>
-    <option value="No formal education"selected={defaultValue==="No formal education"?"selected":""}>No formal education</option>
-    <option value="Primary education"selected={defaultValue==="Primary education"?"selected":""}>Primary education</option>
-    <option value="Secondary education"selected={defaultValue==="Secondary education"?"selected":""}>Secondary education or high school</option>
-    <option value="GED"selected={defaultValue==="GED"?"selected":""}>GED</option>
-    <option value="Vocational qualification"selected={defaultValue==="Vocational qualification"?"selected":""}>Vocational qualification</option>
-    <option value="Bachelor's degree"selected={defaultValue==="Bachelor's degree"?"selected":""}>Bachelor's degree</option>
-    <option value="Master's degree"selected={defaultValue==="Master's degree"?"selected":""}>Master's degree</option>
-    <option value="Doctorate or higher"selected={defaultValue==="Doctorate or higher"?"selected":""}>Doctorate or higher</option>
-  </select>
-</fieldset>
-        </>
-    )
+import { useState, useEffect } from "react";
+import "./FormTypeStyle.css";
+import Select from "react-select";
+export const defaultskills = [
+  "Full-stack developer",
+  "Frontend developer",
+  "Backend developer",
+  "DevOps engineer",
+  "Database administrator",
+  "Software engineer",
+  "System administrator",
+  "Network administrator",
+  "Security analyst",
+  "System analyst",
+  "Software tester",
+  "Software architect",
+  "Software developer",
+  "Mobile developer",
+  "UI/UX designer",
+  "Graphic designer",
+  "Content writer",
+  "Content editor",
+  "Content strategist",
+];
+interface UniProp {
+  UKPRN: number;
+  PROVIDER_NAME: string;
+  VIEW_NAME: string;
+}
+export const Universities = await ImportUniversities();
+
+async function ImportUniversities(): Promise<UniProp[]> {
+  const res = await fetch("http://localhost:5000/search/returnunis");
+
+  const parseRes: Promise<UniProp[]> = await res.json();
+  return parseRes;
 }
 
+export default function DegreeType({ defaultValue, onChange }) {
+  //syncing defaultValue
+  const [selected, setSelected] = useState(defaultValue ?? "");
+  useEffect(() => {
+    if (defaultValue && defaultValue.length > 0 && selected.length === 0) {
+      setSelected(defaultValue);
+    }
+  }, [defaultValue]);
+  const handleChange = (e) => {
+    setSelected(e.target.value);
+    if (onChange) onChange(e.target.value);
+  };
+  return (
+    <>
+      <fieldset>
+        <select
+          className="form-control dropdown"
+          id="education"
+          name="education"
+          value={defaultValue}
+          onChange={handleChange}
+        >
+          <option value="" disabled={true}>
+            -- select one --
+          </option>
+          <option value="No formal education">No formal education</option>
+          <option value="Primary education">Primary education</option>
+          <option value="Secondary education">
+            Secondary education or high school
+          </option>
+          <option value="GED">GED</option>
+          <option value="Vocational qualification">
+            Vocational qualification
+          </option>
+          <option value="Bachelor's degree">Bachelor's degree</option>
+          <option value="Master's degree">Master's degree</option>
+          <option value="Doctorate or higher">Doctorate or higher</option>
+        </select>
+      </fieldset>
+    </>
+  );
+}
 
-export function SkillsType({defaultValue=[],onChange,}: {defaultValue?: string[];onChange?: (skills: string[]) => void;}){
-    const [selected, setSelected] = useState(defaultValue ?? []);
-    const [isDropped,setIsDropped] = useState(false)
-  const defaultskills = [
-    "Full-stack developer",
-    "Frontend developer",
-    "Backend developer",
-    "DevOps engineer",
-    "Database administrator",
-    "Software engineer",
-    "System administrator",
-    "Network administrator",
-    "Security analyst",
-    "System analyst",
-    "Software tester",
-    "Software architect",
-    "Software developer",
-    "Mobile developer",
-    "UI/UX designer",
-    "Graphic designer",
-    "Content writer",
-    "Content editor",
-    "Content strategist",
-  ];
+export function SkillsType({
+  defaultValue = [],
+  onChange,
+}: {
+  defaultValue?: string[];
+  onChange?: (skills: string[]) => void;
+}) {
+  const [selected, setSelected] = useState(defaultValue ?? []);
+  const [isDropped, setIsDropped] = useState(false);
+
   //syncing defaultValue
   useEffect(() => {
     if (defaultValue && defaultValue.length > 0 && selected.length === 0) {
@@ -61,49 +104,138 @@ export function SkillsType({defaultValue=[],onChange,}: {defaultValue?: string[]
     }
   }, [selected, onChange]);
 
-  
-  const onClickDropdown= ()=>{
-    setIsDropped(!isDropped)
-  }
+  const onClickDropdown = () => {
+    setIsDropped(!isDropped);
+  };
 
   // toggles a skill on click
   const toggleSkill = (skill: string) => {
-    setSelected((prev) =>
-      prev.includes(skill)
-        ? prev.filter((s) => s !== skill) // remove if already selected
-        : [...prev, skill] // add if not selected
+    setSelected(
+      (prev) =>
+        prev.includes(skill)
+          ? prev.filter((s) => s !== skill) // remove if already selected
+          : [...prev, skill] // add if not selected
     );
   };
 
   return (
     <>
-    <div ><button onClick={onClickDropdown} className="form-control dropdown">---Click to show skills---</button></div>
-    {isDropped?
-    <fieldset>
-        <div className="vertical-scroll">
-        {defaultskills.map((skill) => (
-          <div
-            key={skill}
-            onClick={() => toggleSkill(skill)}
-            style={{
-              cursor: "pointer",
-              padding: "6px 10px",
-              margin: "2px 0",
-              borderRadius: "4px",
-              border: "1px solid #ccc",
-              background: selected.includes(skill) ? "#007bff" : "white",
-              color: selected.includes(skill) ? "white" : "black",
-            }}
-          >
-            {skill}
-          </div>
-        ))}
+      <div>
+        <button
+          type="button"
+          onClick={onClickDropdown}
+          className="form-control dropdown"
+        >
+          ---Click to show skills---
+        </button>
       </div>
-    </fieldset>
-    
-    :
-    <></>
+      {isDropped ? (
+        <fieldset>
+          <div className="vertical-scroll">
+            {defaultskills.map((skill) => (
+              <div
+                key={skill}
+                onClick={() => toggleSkill(skill)}
+                style={{
+                  cursor: "pointer",
+                  padding: "6px 10px",
+                  margin: "2px 0",
+                  borderRadius: "4px",
+                  border: "1px solid #ccc",
+                  background: selected.includes(skill) ? "#007bff" : "white",
+                  color: selected.includes(skill) ? "white" : "black",
+                }}
+              >
+                {skill}
+              </div>
+            ))}
+          </div>
+        </fieldset>
+      ) : (
+        <></>
+      )}
+    </>
+  );
 }
+
+export function UniversityInput({
+  defaultValue = [],
+  onChange,
+  multiSelect = false,
+}: {
+  defaultValue?: string[];
+  onChange?: (uni: string[]) => void;
+  multiSelect?: boolean;
+}) {
+  const [selected, setSelected] = useState(defaultValue ?? []);
+  const [isDropped, setIsDropped] = useState(false);
+  const [search, setSearch] = useState("");
+  //syncing defaultValue
+  useEffect(() => {
+    if (defaultValue && defaultValue.length > 0 && selected.length === 0) {
+      setSelected(defaultValue);
+    }
+  }, [defaultValue]);
+
+  //Checks if the inputs in the form have been changed
+  useEffect(() => {
+    if (onChange) {
+      onChange(selected);
+    }
+  }, [selected, onChange]);
+
+  const onClickDropdown = () => {
+    setIsDropped(!isDropped);
+  };
+  // toggles a university on click
+  const toggleUni = (uni) => {
+    {
+      multiSelect === true
+        ? setSelected(
+            (prev) =>
+              prev.includes(uni)
+                ? prev.filter((s) => s !== uni) // remove if already selected
+                : [...prev, uni] // add if not selected
+          )
+        : setSelected(
+            (prev) =>
+              prev.includes(uni)
+                ? prev.filter((s) => s !== uni) // remove previously selected value
+                : [uni] // add if not selected
+          );
+    }
+  };
+  const filteredUnis = Universities.filter((uni) =>
+    uni.VIEW_NAME.toLowerCase().includes(search.toLowerCase())
+  );
+  return (
+    <>
+      <div>
+        <input
+          type="text"
+          onClick={onClickDropdown}
+          onChange={(e) => setSearch(e.target.value)}
+          value={search}
+          className="form-control dropdown"
+        />
+      </div>
+      <fieldset>
+        <div className="vertical-scroll">
+          {filteredUnis.map((uni) => (
+            <>
+              <div
+                key={uni.UKPRN}
+                onClick={() => toggleUni(uni.VIEW_NAME)}
+                className={`inputSelect${
+                  selected.includes(uni.VIEW_NAME) ? "_selected" : ""
+                }`}
+              >
+                {uni.VIEW_NAME}
+              </div>
+            </>
+          ))}
+        </div>
+      </fieldset>
     </>
   );
 }

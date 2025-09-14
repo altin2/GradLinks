@@ -6,8 +6,12 @@ router.get("/",async(req,res)=>{
     try {
       const token = req.headers.authorization?.split(" ")[1];
       if (!token) return res.status(401).json("No token provided");
-    
-      const { data: { user }, error } = await supabase.auth.getUser(token);
+      const { data: { user }} = await supabase.auth.getUser(token);
+      const userId = user.id
+      const { data, error } = await supabase
+      .from("users")
+      .select("*")
+      .eq('id',userId)
       if (error) return res.status(401).json({ error: error.message });
       
       return res.json(user.email);
@@ -20,19 +24,18 @@ router.get("/",async(req,res)=>{
     }
 })
 //send notification by JWT
-router.get("/sendnotification",async(req,res)=>{
+router.post("/sendnotification",async(req,res)=>{
   try {
+    const {message,recieverID}=req.body
     const token = req.headers.authorization?.split(" ")[1];
     const { data: { user }} = await supabase.auth.getUser(token);
     const userId = user.id
-      const {message}=req.body
+      
       const { data, error } = await supabase
       .from('notifications')
-      .insert([{ user_id: userId, message: message }]);
+      .insert([{ sender_id: userId, message: message,user_id:recieverID }]);
       if (error) {
       console.error('Error sending notification:', error);
-      } else {
-      console.log('Notification sent:', data);
       }
   } catch (err) {
     console.error(`In dashboard: ${err.message}`)

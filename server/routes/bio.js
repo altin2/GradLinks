@@ -5,17 +5,17 @@ router.get("/returnbioinfo",async(req,res)=>{
     try {
         const token = req.headers.authorization?.split(" ")[1];
         const { data: { user }} = await supabase.auth.getUser(token);
-        const { data, error } = await supabase.from("user_grad").select("bio_description,degree_type,work_years,skills_desc").eq("id", user.id);
+        const { data, error } = await supabase.from("user_grad").select("bio_description,degree_type,work_years,skills_desc,attended_uni").eq("id", user.id);
         res.json(data[0]);
-
     } catch (err) {
         console.error(`In bio: ${err.message}`);
         res.status(500).send({ error: err.message || "Internal server error" });
     }
 })
-router.get("/updatebioinfo",async(req,res)=>{
+router.post("/updatebioinfo",async(req,res)=>{
     try {
-        const {bio_description,degree_type,work_years,skills_desc} = req.body
+        const {bio_description,degree_type,work_years,skills_desc,attended_uni} = req.body
+        const token = req.headers.authorization?.split(" ")[1];
         const { data: { user }} = await supabase.auth.getUser(token);
     const {error} = await supabase
     .from("user_grad")
@@ -23,13 +23,15 @@ router.get("/updatebioinfo",async(req,res)=>{
         bio_description,
         degree_type,
         work_years,
-        skills_desc
+        skills_desc,
+        attended_uni
     })
     .eq("id",user.id)
     if(error){
         console.error(`In bio: ${err.message}`)
     res.status(500).send({ error: err.message || "Internal server error" });
     }
+    res.json("Success")
     } catch (err) {
         console.error(`In bio: ${err.message}`);
         res.status(500).send({ error: err.message || "Internal server error" });

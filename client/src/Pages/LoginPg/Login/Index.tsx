@@ -13,7 +13,7 @@ const Login = ({ setAuth }) => {
   });
 
   const { email, password } = inputs;
-  
+
   const onChange = (e) =>
     setInputs({ ...inputs, [e.target.name]: e.target.value });
 
@@ -24,20 +24,19 @@ const Login = ({ setAuth }) => {
         email: email,
         password: password,
       });
-  
+
       if (error) {
         toast.error(error.message);
         setAuth(false);
         return;
       }
-  
+
       // Supabase automatically saves tokens in localStorage
       setAuth(true);
       toast.success("Logged in Successfully");
-      supabase.auth.onAuthStateChange((event, session) => {
-        console.log("Auth event:", event, session);
-      });
-      
+      // supabase.auth.onAuthStateChange((event, session) => {
+      //   console.log("Auth event:", event, session);
+      // });
     } catch (err) {
       console.error(`In Login: ${err.message}`);
     }
@@ -52,8 +51,6 @@ const Login = ({ setAuth }) => {
           <div className="underline"></div>
         </div>
         <div className="inputs">
-          
- 
           <form onSubmit={onSubmitForm}>
             <InputForm
               img={email_icon}

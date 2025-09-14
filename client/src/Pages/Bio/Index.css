@@ -19,6 +19,15 @@
     font-size: 25px;
     font-weight: 700;
   }
+  .headertxt{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    font-weight: 700;
+    text-decoration: underline;
+  }
+
   
   .submit{
     display: flex;
@@ -42,7 +51,7 @@
     flex-direction: column;
     margin:auto;
     margin-top: 10px;
-    width: 600px;
+    width: 500px;
     padding-bottom: 30px;
     background: rgb(187, 187, 187);
     border-radius: 23px;

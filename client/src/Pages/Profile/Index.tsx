@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 
 import { useNavigate } from "react-router-dom";
 
@@ -6,30 +6,23 @@ import { useNavigate } from "react-router-dom";
 import dashboardimg from "../universal_components/universal_assets/dashboard.svg";
 
 //Components/Styles
-import { GradForm,EmployerForm } from "./components/FormTypes.tsx";
+import { GradForm, EmployerForm } from "./components/FormTypes.tsx";
 import DashbordBtn from "../Dashboard/components/LinktoPgBtn";
 import Dock from "../universal_components/Dock";
+import { BioFormComponent } from "../Bio/Index.tsx";
 import "./Index.css";
+
 //Functions
-import { returnGradStatus} from "./components/functions/ProfileRoutes.tsx";
+import { returnGradStatus } from "./components/functions/ProfileRoutes.tsx";
 export default function Profile() {
   const navigate = useNavigate();
-  const [gradStatus,setGradStatus] = useState(null)
+  const [gradStatus, setGradStatus] = useState(null);
   const items = [
     {
       icon: <DashbordBtn size={50} img_path={dashboardimg} />,
       label: "Back To Dashboard",
       onClick: () => navigate("/dashboard"),
     },
-    ...(gradStatus === true
-      ? [
-          {
-            icon: <DashbordBtn size={50} img_path={null} />,
-            label: "To User Bio",
-            onClick: () => navigate("/bio"),
-          },
-        ]
-      : []),
   ];
   useEffect(() => {
     const fetchGradStatus = async () => {
@@ -37,8 +30,8 @@ export default function Profile() {
       setGradStatus(profileName);
     };
     fetchGradStatus();
-  }, [])
-  
+  }, []);
+
   return (
     <>
       <div className="top-bar">
@@ -49,14 +42,20 @@ export default function Profile() {
           magnification={70}
         />
       </div>
-      <div className="form-container">
-      {gradStatus === null 
-        ? <h1 className="titletxt">Loading...</h1>
-        : gradStatus === true 
-          ? <GradForm/> 
-          : <EmployerForm/>}
+      <div>
+        {gradStatus === null ? (
+          <h1 className="titletxt">Loading...</h1>
+        ) : gradStatus === true ? (
+          <>
+            <div className="side-by-side">
+              <GradForm />
+              <BioFormComponent />
+            </div>
+          </>
+        ) : (
+          <EmployerForm />
+        )}
       </div>
     </>
   );
 }
-

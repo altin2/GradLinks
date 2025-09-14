@@ -1,5 +1,5 @@
 import './App.css';
-import React, { Fragment, useState, useEffect } from "react";
+import { Fragment, useState, useEffect } from "react";
 
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
@@ -11,8 +11,7 @@ import SignupUser from "./Pages/LoginPg/Signup/Index.tsx";
 import Dashboard from './Pages/Dashboard/Index.tsx';
 import Profile from './Pages/Profile/Index.tsx';
 import NotifPage from './Pages/Notifications/Index.tsx';
-import Bio from './Pages/Bio/Index.tsx';
-
+import SearchPage from './Pages/SearchAlgorithm/Index.tsx';
 //BaaS client side
 import supabase from './supabase-client.js';
 
@@ -115,10 +114,10 @@ function App() {
                 }
               />
               <Route
-                path="/bio"
+                path="/search_talent"
                 element={
                   isAuthenticated ? (
-                    <Bio />
+                    <SearchPage />
                   ) : (
                     <Navigate to="/login" />
                   )

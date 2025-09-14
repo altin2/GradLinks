@@ -39,6 +39,6 @@
     "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",
     "skipLibCheck": true,
-  },"files":["index.d.ts"],
+  },"files": ["custom.d.ts"],
   
 }

@@ -3,4 +3,22 @@
     overflow-y: auto;
     height: 300px;
   }
-  
+.inputSelect{
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  background: #ffffff;
+  color: "black";
+  cursor: pointer;
+  padding: 6px 10px;
+  margin: 2px 0;
+}
+
+.inputSelect_selected{
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  background: #007bff;
+  color: "white";
+  cursor: pointer;
+  padding: 6px 10px;
+  margin: 2px 0;
+}
