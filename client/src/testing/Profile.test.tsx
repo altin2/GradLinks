@@ -117,7 +117,13 @@ describe("Ensuring everything in the Grad Profile renders properly", () => {
     global.window.addEventListener = vi.fn();
     global.window.removeEventListener = vi.fn();
   });
-  const ages = [9, 20, 99, 100, 101];
+  const ages = [
+    9,
+    16, //boundary
+    99,
+    100, //boundary
+    101, //erroneous
+  ];
 
   it.each(names)("Tests for names %s", async (name) => {
     render(
@@ -242,6 +248,7 @@ describe("Ensuring everything in bio is handled correctly", () => {
     "helloooooo!",
     "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of de Finibus Bonorum et Malorum (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, Lorem ipsum dolor sit amet.., comes from a line in section 1.10.32. The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from de Finibus Bonorum et Maloru by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham.",
   ];
+
   beforeEach(() => {
     vi.clearAllMocks();
   });
@@ -273,7 +280,13 @@ describe("Ensuring everything in bio is handled correctly", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
-  const years = [-1, 0, 20, 100, 101];
+  const years = [
+    -1, //erroneous
+    0, //boundary
+    20,
+    100, //boundary
+    101, //erroneous
+  ];
   it.each(years)("Test for work year %s", async (year) => {
     render(
       <MemoryRouter>
@@ -348,8 +361,8 @@ describe("Ensuring everything in the Employer Profile renders properly", () => {
   const bios = [
     "",
     "Heyo",
-    `${txt.repeat(1000)}`,
-    `${txt.repeat(500)}`,
+    `${txt.repeat(1000)}`, //erroneous
+    `${txt.repeat(500)}`, //boundary
     `${txt.repeat(200)}`,
   ];
   it.each(bios)("Test for employer's bio", async (bio) => {
