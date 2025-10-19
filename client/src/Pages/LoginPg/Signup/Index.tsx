@@ -43,7 +43,7 @@ const SignupUser = ({ setAuth }: any) => {
           });
 
           const parseRes = await response.json();
-
+          //Error handling
           if (!!parseRes && typeof parseRes !== "string") {
             setIsSubmit(true);
           } else {

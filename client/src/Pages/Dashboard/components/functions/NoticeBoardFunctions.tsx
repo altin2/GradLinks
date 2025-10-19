@@ -1,5 +1,6 @@
 import supabase from "../../../../supabase-Client";
 import { toast } from "react-toastify";
+//Function names are self-explanatory
 
 export async function PostNotice(
   message: string,
@@ -27,7 +28,7 @@ export async function PostNotice(
       date,
       verified: data?.[0]?.isVerified,
     };
-
+    //routing to server
     const res = await fetch("http://localhost:5000/notices/uploadnotice", {
       method: "POST",
       headers: {
@@ -37,6 +38,7 @@ export async function PostNotice(
       body: JSON.stringify(body),
     });
     const result = await res.json();
+    //Profile change done on frontend for lower latency
     if (result.success && img) {
       const { error } = await supabase.storage
         .from("user_post_images")

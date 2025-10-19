@@ -69,7 +69,6 @@ export default function NotificationComponent(notification: Notification) {
     fetchNotif();
   }, []);
   const SendMessage = async (id: string, message: string) => {
-    console.log(id, message);
     await SendNotification(id, message);
     toast.success("Sending message");
   };
@@ -89,7 +88,7 @@ export default function NotificationComponent(notification: Notification) {
                           (sender[1] as Grad).middle_name
                         } ${(sender[1] as Grad).last_name}`
                       : "Anonymous User"
-                  }`
+                  }` //Displaying user as anonymous if they don't have a first name
                 : `${(sender[1] as UserEmployer).company_name}`}
               :
             </div>

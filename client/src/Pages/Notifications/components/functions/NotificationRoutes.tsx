@@ -22,6 +22,7 @@ export async function ReturnUserNotifs(): Promise<Notification[]> {
     const parseData: Array<Notification> = await res.json();
     if (!res.ok)
       throw new Error(`Failed to fetch notifications: ${res.status}`);
+    //only returns unread notifications
     const newData = parseData.filter((val) => {
       return val.is_read === false;
     });

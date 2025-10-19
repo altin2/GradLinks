@@ -142,6 +142,7 @@ export function NoticeBoardEmployer() {
     setInputs({ ...inputs, [e.target.name]: e.target.files[0] });
   }
   const submitPostForm = async () => {
+    //Converting workParams to stringified literal
     var WorkParams = "";
     const today = new Date().toISOString().split("T")[0];
     if (selectedSign === "<>") {
@@ -149,6 +150,7 @@ export function NoticeBoardEmployer() {
     } else {
       WorkParams = `${selectedSign} ${inputs.work_years} `;
     }
+    //All Test cases
     if (inputs.title.length < 1) {
       toast.error("Not all inputs were filled");
       return;

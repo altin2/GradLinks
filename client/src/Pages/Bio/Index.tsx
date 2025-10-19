@@ -43,6 +43,7 @@ export function BioFormComponent() {
       attended_uni: inputs.attended_uni,
     };
     const workYears = Number(inputs.work_years ?? 0);
+    //Ensures inputs are valid
     if (
       (inputs.bio_description ?? "").length > 400 ||
       (workYears ?? 0) > 100 ||

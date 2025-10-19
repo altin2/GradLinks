@@ -1,5 +1,6 @@
 import supabase from "../../../supabase-Client";
 
+//Returns a user bio using their login session
 export async function returnBioInfo() {
   try {
     const {
@@ -15,6 +16,7 @@ export async function returnBioInfo() {
     console.error(err.message);
   }
 }
+//Updates a user bio using their login session
 export async function updateBioInfo(body: any) {
   try {
     const {

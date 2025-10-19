@@ -30,6 +30,7 @@ const Dashboard = () => {
   const [lastScrollY, setLastScrollY] = useState(0);
   const [gradStatus, setGradStatus] = useState(null);
   const [pfpUrl, setPfpUrl] = useState<any>(null);
+  //For testing only:
   const { isAuthenticated, user } = useAuthStatus();
 
   const fetchPFP = async () => {
@@ -61,6 +62,7 @@ const Dashboard = () => {
         ]
       : []),
   ];
+  //Fixes scrolling issue.
   const controlNavbar = () => {
     if (window.scrollY > lastScrollY) {
       setShow(false);
@@ -79,6 +81,7 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
+        //Loading all user's data upon login, like notifications, profile data, and notices.
         const profileName = await getProfile();
         const notifs = await ReturnUserNotifs();
         setNotifLen(notifs.length);
