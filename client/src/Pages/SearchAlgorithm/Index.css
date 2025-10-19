@@ -16,6 +16,14 @@
     height: 300px;
     overflow-y: scroll;
 }
+.form-container-talent {
+  position: relative;   
+  width: 50vw;         
+  height: 86vh;    
+  background-color: #292929;
+  border-radius: 20px;
+  margin: 0 auto;
+}
 
 .profile-row{
     margin-bottom: 10px;
@@ -30,6 +38,11 @@
     margin-left: 25px;
     font-size: 13px;
     font-family: Arial, Helvetica, sans-serif;
+}
+.mid-container{
+    width:75%;
+    display: block;
+    margin: 0 auto;
 }
 .subheader-title{
     font-size: 17px;
@@ -68,9 +81,46 @@
     margin-bottom: 10px;
 }
 
-.side-by-side{
-    flex-direction: row;
-    display: flex;
-    margin: auto;
-    
+.side-by-side {
+  display: flex;
+  flex-wrap: wrap;       /* allow wrapping */
+  gap: 20px;
+}
+.button-arrow-left {
+  width: 20%;
+  background-color: white;
+  color: black;
+  position: absolute; /* take out of normal flow */
+  bottom: 10px;       /* stick to bottom */
+  left: 10px;         /* stick to left */
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.button-arrow-right {
+  width: 20%;
+  background-color: white;
+  color: black;
+  position: absolute; /* take out of normal flow */
+  bottom: 10px;       /* stick to bottom */
+  right: 10px;         /* stick to left */
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.div-element-nav {
+  width: 20%;
+  background-color: white;
+  color: black;
+  position: absolute; /* take out of normal flow */
+  bottom: 10px;       /* stick to bottom */
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.button-arrow-right:disabled{
+    background-color: #898989;
+}
+.button-arrow-left:disabled{
+    background-color: #898989;
 }

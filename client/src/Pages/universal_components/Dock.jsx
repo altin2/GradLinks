@@ -16,6 +16,7 @@ import {
   useState,
 } from "react";
 import "./DockStyle.css";
+import React from "react"
 
 function DockItem({
   children,
@@ -113,6 +114,7 @@ export default function Dock({
   panelHeight = 68,
   dockHeight = 256,
   baseItemSize = 50,
+  ...rest
 }) {
   const mouseX = useMotionValue(Infinity);
   const isHovered = useMotionValue(0);
@@ -128,6 +130,7 @@ export default function Dock({
     <motion.div
       style={{ height, scrollbarWidth: "none" }}
       className="dock-outer"
+      {...rest}
     >
       <motion.div
         onMouseMove={({ pageX }) => {

@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import "../Index.css";
 import LargeInputForm from "../../Profile/components/LargeInpForm";
 import { SendNotification } from "../../Notifications/components/functions/NotificationRoutes";
+import supabase from "../../../supabase-Client";
+import emptypfp from "../../universal_components/universal_assets/emptypfp.svg";
+
 export interface UserPublic {
   age: number;
   attended_uni: string[];
@@ -20,10 +23,9 @@ interface ResultProps {
 
 export function ResultsTable({ results }: ResultProps) {
   const [msg, setMsg] = useState("");
-
-  const OnChangeMsg = (e) => setMsg(e.target.value);
-  const SendMessage = async (id, message) => {
-    await SendNotification(id, message);
+  const OnChangeMsg = (e: any) => setMsg(e.target.value);
+  const SendMessage = async (id: string, message: string) => {
+    if (message.length <= 1000) await SendNotification(id, message);
   };
   return (
     <>
@@ -32,8 +34,10 @@ export function ResultsTable({ results }: ResultProps) {
           return (
             <div key={user.id} className="profile-container">
               <div className="name-header">
-                {user.first_name} {user.middle_name} {user.last_name}
+                {user.first_name ? user.first_name : "Anonymous User"}
+                {user.middle_name} {user.last_name}
               </div>
+              <ProfileImage userId={user.id} />
               <div className="bio">{user.bio_description}</div>
               <div className="subheader-title">Education:</div>
               <div className="term-wrapper">
@@ -112,6 +116,7 @@ export function ResultsTable({ results }: ResultProps) {
                         rows={5}
                         cols={10}
                         maxTxtSize={1000}
+                        data-testid="mockLargeInput"
                       />
                     </div>
                     <div className="modal-footer">
@@ -139,5 +144,22 @@ export function ResultsTable({ results }: ResultProps) {
         })}
       </div>
     </>
+  );
+}
+function ProfileImage({ userId }: { userId: string }) {
+  const { data } = supabase.storage
+    .from("user_pfps")
+    .getPublicUrl(`Public/${userId}`);
+
+  const publicUrl = data?.publicUrl;
+  const [imgSrc, setImgSrc] = useState(publicUrl || emptypfp);
+
+  return (
+    <img
+      src={imgSrc}
+      alt="Profile"
+      className="img-container-2"
+      onError={() => setImgSrc(emptypfp)}
+    />
   );
 }

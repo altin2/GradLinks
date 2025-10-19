@@ -4,7 +4,7 @@ const validinfo = require("../middleware/validinfo")
 const supabase = require("../supabase-server.js")
 //signup route
 router.post("/signup",validinfo,async(req,res)=>{ 
-  const{email,phonenumber,pass,isGrad} = req.body; 
+  const{email,pass,isGrad,phonenumber} = req.body; 
   try { const{data:data,error:error}=await supabase 
   .from("users") 
   .select() 

@@ -1,8 +1,7 @@
 const express = require("express");
-const multer = require("multer");
-const upload = multer(); 
 const router = express.Router();
 const supabase = require("../supabase-server.js");
+const {createUserSupabase} = require("../middleware/createuser.js")
 
 function ParseExpression(input, expression) {
   expression = expression.trim();
@@ -88,13 +87,16 @@ router.post("/uploadnotice", async (req, res) => {
       required_degree,
       required_skills,
       required_work,
-      Title
+      Title,
+      date,
+      verified
     } = req.body;
 
     const token = req.headers.authorization?.split(" ")[1];
     const { data: { user } } = await supabase.auth.getUser(token);
+    const userSupabase = createUserSupabase(token);
 
-    const { data: noticeData, error: insertError } = await supabase
+    const { data: noticeData, error: insertError } = await userSupabase
       .from("notices")
       .insert({
         message,
@@ -103,6 +105,8 @@ router.post("/uploadnotice", async (req, res) => {
         required_work_years: required_work,
         Title,
         poster_id: user.id,
+        expiry_date:date,
+        Verified_Poster:verified
       })
       .select();
 
@@ -120,6 +124,9 @@ router.post("/uploadnotice", async (req, res) => {
 router.post("/returnrelevantnotices",async(req,res)=>{
     
     try {
+      const token = req.headers.authorization?.split(" ")[1];
+    if (!token) return res.status(401).json({ error: "Missing token" });
+    const userSupabase = createUserSupabase(token);
         //For the body, it includes the user's degree_type, skills (array), and work_years
         const {WorkParam, SkillsParam, DegreeParam}=req.body
         const DegreeTypes=[
@@ -133,11 +140,14 @@ router.post("/returnrelevantnotices",async(req,res)=>{
              "Doctorate or higher"
         ]
         const Degree_Search = DegreeTypes.reverse().slice(DegreeTypes.indexOf(DegreeParam))
-        //First returns notices based on degree_type
-        const { data, error } = await supabase
+        //First returns notices based on degree_type and if they're after the expiry date.
+        const { data, error } = await userSupabase
   .from("notices")
   .select("*")
-  .in("required_degree", Degree_Search);
+  .in("required_degree", Degree_Search)
+  .gt("expiry_date", new Date().toISOString()); // expiry_date < now
+
+  
 
     var dictionary={}
     //Releavance algorithm:
@@ -177,10 +187,36 @@ router.post("/returnrelevantnotices",async(req,res)=>{
 })
 router.post("/returnrandomnotices",async(req,res)=>{
   try {
-    const { data, error } = await supabase
+    const token = req.headers.authorization?.split(" ")[1];
+    if (!token) return res.status(401).json({ error: "Missing token" });
+    const userSupabase = createUserSupabase(token);
+    const { data, error } = await userSupabase
   .from("random_notices")
   .select("*")
   .limit(10)
+  .gt("expiry_date", new Date().toISOString()); 
+  if (error){
+    console.error(error)
+    res.status(500).send(error)
+  }
+  res.json(data)
+  } catch (err) {
+    console.error(err);
+    res.status(500).send(err);
+  }
+})
+router.post("/returnpersonalnotices",async(req,res)=>{
+  try {
+    const token = req.headers.authorization?.split(" ")[1];
+    if (!token) return res.status(401).json({ error: "Missing token" });
+    const userSupabase = createUserSupabase(token);
+    const { data: { user } } = await supabase.auth.getUser(token);
+    const { data, error } = await userSupabase
+  .from("notices")
+  .select()
+  .eq('poster_id',user.id)
+  .order('expiry_date',{ascending:false})
+  
   if (error){
     console.error(error)
     res.status(500).send(error)

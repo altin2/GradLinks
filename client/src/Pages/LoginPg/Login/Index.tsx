@@ -1,12 +1,15 @@
-import React, { Fragment, useState } from "react";
+import React, { Provider, useState } from "react";
 import { Link } from "react-router-dom";
 import "./Index.css";
 import { toast } from "react-toastify";
 import email_icon from "./Assets/emailicon.png";
 import pass_icon from "./Assets/passicon.png";
+import google from "./Assets/google.png";
+import linkedIn from "./Assets/linkedIn.png";
 import InputForm from "../components/InputForm.tsx";
-import supabase from "../../../supabase-client.js";
-const Login = ({ setAuth }) => {
+import supabase from "../../../supabase-Client.js";
+
+const Login = ({ setAuth }: any) => {
   const [inputs, setInputs] = useState({
     email: "",
     password: "",
@@ -14,11 +17,15 @@ const Login = ({ setAuth }) => {
 
   const { email, password } = inputs;
 
-  const onChange = (e) =>
+  const onChange = (e: any) =>
     setInputs({ ...inputs, [e.target.name]: e.target.value });
-
-  const onSubmitForm = async (e) => {
-    e.preventDefault(); // Prevent form from refreshing the page
+  const signIn = async (id: any) => {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: id,
+    });
+  };
+  const onSubmitForm = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
         email: email,
@@ -31,13 +38,9 @@ const Login = ({ setAuth }) => {
         return;
       }
 
-      // Supabase automatically saves tokens in localStorage
       setAuth(true);
       toast.success("Logged in Successfully");
-      // supabase.auth.onAuthStateChange((event, session) => {
-      //   console.log("Auth event:", event, session);
-      // });
-    } catch (err) {
+    } catch (err: any) {
       console.error(`In Login: ${err.message}`);
     }
   };
@@ -51,28 +54,51 @@ const Login = ({ setAuth }) => {
           <div className="underline"></div>
         </div>
         <div className="inputs">
-          <form onSubmit={onSubmitForm}>
+          <div className="side-by-side">
+            <img
+              src={google}
+              alt="Google Sign In"
+              className="img-oAuth"
+              onClick={() => signIn("google")}
+              style={{ cursor: "pointer" }}
+              data-testid="oAuthGoogle"
+            />
+            <img
+              src={linkedIn}
+              alt="LinkedIn Sign In"
+              className="img-oAuth"
+              onClick={() => signIn("linkedin_oidc")}
+              style={{ cursor: "pointer" }}
+              data-testid="oAuthLinkedIn"
+            />
+          </div>
+          <form onSubmit={onSubmitForm} autoComplete="off">
             <InputForm
               img={email_icon}
-              onChange={(e) => onChange(e)}
+              onChange={(e: any) => onChange(e)}
               name="email"
               value={email}
-              type="text"
+              type="email"
               placeholder="Email"
+              data-testid="email-input"
             />
             <InputForm
               img={pass_icon}
-              onChange={(e) => onChange(e)}
+              onChange={(e: any) => onChange(e)}
               name="password"
               value={password}
               type="password"
               placeholder="Password"
+              data-testid="pass-input1"
             />
 
             <div className="submit-container">
-              <button className="submit">Log In</button>
+              <button className="submit" type="submit">
+                Log In
+              </button>
             </div>
           </form>
+
           <div className="submit-container">
             <p className="text-acc">Don't have an account? </p>
             <Link to="/signup">Register</Link>

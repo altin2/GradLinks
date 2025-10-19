@@ -33,7 +33,7 @@ export function BioFormComponent() {
     };
     fetchBioInfo();
   }, []);
-  const handleUpdate = async (e) => {
+  const handleUpdate = async (e: any) => {
     e.preventDefault();
     const body = {
       bio_description: inputs.bio_description,
@@ -42,37 +42,47 @@ export function BioFormComponent() {
       skills_desc: inputs.skills_description,
       attended_uni: inputs.attended_uni,
     };
+    const workYears = Number(inputs.work_years ?? 0);
+    if (
+      (inputs.bio_description ?? "").length > 400 ||
+      (workYears ?? 0) > 100 ||
+      (workYears ?? 0) < 0
+    )
+      return;
 
     const response = await updateBioInfo(body);
     {
-      response === "Success" ? toast.success(response) : toast.error(response);
+      response === "Successfully updated Bio"
+        ? toast.success(response)
+        : toast.error(response);
     }
   };
 
-  const OnDegreeChange = (degree) => {
+  const OnDegreeChange = (degree: any) => {
     setInputs((prev) =>
       prev.degree_type === degree ? prev : { ...prev, degree_type: degree }
     );
   };
-  const OnChangeYrs = (e) =>
+  const OnChangeYrs = (e: any) =>
     setInputs({ ...inputs, [e.target.name]: e.target.value });
-  const OnSkillsChange = (skills) => {
+  const OnSkillsChange = (skills: any) => {
     setInputs((prev) =>
       prev.skills_description === skills
         ? prev
         : { ...prev, skills_description: skills }
     );
   };
-  const OnUniChange = (uni) => {
+  const OnUniChange = (uni: any) => {
     setInputs((prev) =>
       prev.attended_uni === uni ? prev : { ...prev, attended_uni: uni }
     );
   };
   return (
     <form onSubmit={handleUpdate}>
-      <div className="form-container">
-        <h1 className="headertxt">Employers can see this!</h1>
+      <div className="form-container-grad">
+        <h1 className="headertxt">My Profile</h1>
         <h1 className="titletxt">Education</h1>
+
         <DegreeType
           defaultValue={inputs.degree_type}
           onChange={OnDegreeChange}
@@ -81,34 +91,48 @@ export function BioFormComponent() {
         <SkillsType
           defaultValue={inputs.skills_description}
           onChange={OnSkillsChange}
+          minHeightItems={4}
         />
-        <h1 className="titletxt">Attended University</h1>
+        <h1 className="titletxt">Attended UK University</h1>
         <UniversityInput
           onChange={OnUniChange}
           defaultValue={inputs.attended_uni}
           multiSelect={false}
+          minHeightItems={5}
         />
         <h1 className="titletxt">Work Years</h1>
-        <InputForm
-          img={null}
-          onChange={(e) => OnChangeYrs(e)}
-          name="work_years"
-          value={inputs.work_years}
-          type="number"
-          placeholder="work years"
-        />
+        <div className="center">
+          <InputForm
+            img={null}
+            onChange={(e: any) => OnChangeYrs(e)}
+            name="work_years"
+            value={inputs.work_years}
+            type="number"
+            placeholder="work years"
+            max={100}
+            min={0}
+            small={true}
+            data-testid="workYrs"
+          />
+        </div>
         <h1 className="titletxt">User Bio</h1>
-        <LargeInputForm
-          onChange={(e) => OnChangeYrs(e)}
-          name="bio_description"
-          value={inputs.bio_description}
-          placeholder="Write your profile bio here! Employers will see this! (400 chars max)"
-          rows={5}
-          cols={10}
-          maxTxtSize={400}
-        />
+        <div className="center">
+          <LargeInputForm
+            onChange={(e: any) => OnChangeYrs(e)}
+            name="bio_description"
+            value={inputs.bio_description}
+            placeholder="Write your profile bio here! Employers will see this! (400 chars max)"
+            rows={5}
+            cols={10}
+            maxTxtSize={400}
+            small={true}
+            data-testid="userBio"
+          />
+        </div>
         <div className="submit-container">
-          <button className="submit">Update</button>
+          <button className="submit" data-testid="update">
+            Update
+          </button>
         </div>
       </div>
     </form>

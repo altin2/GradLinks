@@ -1,5 +1,6 @@
 const supabase = require("../supabase-server.js")
 const router = require("express").Router()
+const {createUserSupabase} = require("../middleware/createuser.js")
 
 router.get("/returnbioinfo",async(req,res)=>{
     try {
@@ -29,9 +30,11 @@ router.post("/updatebioinfo",async(req,res)=>{
     .eq("id",user.id)
     if(error){
         console.error(`In bio: ${err.message}`)
-    res.status(500).send({ error: err.message || "Internal server error" });
+        res.json({ error: err.message || "Internal server error" });
+    }else{
+        res.json("Successfully updated Bio")
     }
-    res.json("Success")
+    
     } catch (err) {
         console.error(`In bio: ${err.message}`);
         res.status(500).send({ error: err.message || "Internal server error" });

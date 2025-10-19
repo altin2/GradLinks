@@ -1,5 +1,4 @@
-import supabase from "../../../../supabase-client";
-
+import supabase from "../../../../supabase-Client.js";
 export async function RelevanceAlgorithm(
   WorkParam?: string,
   SkillsParam?: string[],
@@ -10,12 +9,12 @@ export async function RelevanceAlgorithm(
     const {
       data: { session },
     } = await supabase.auth.getSession();
-
     const body = { WorkParam, SkillParam: SkillsParam, DegreeParam, UniParam };
     const res = await fetch("http://localhost:5000/search", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${session?.access_token}`,
       },
       body: JSON.stringify(body),
     });

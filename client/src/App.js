@@ -1,6 +1,6 @@
 import './App.css';
 import { Fragment, useState, useEffect } from "react";
-
+import {toast} from "react-toastify"
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -13,7 +13,7 @@ import Profile from './Pages/Profile/Index.tsx';
 import NotifPage from './Pages/Notifications/Index.tsx';
 import SearchPage from './Pages/SearchAlgorithm/Index.tsx';
 //BaaS client side
-import supabase from './supabase-client.js';
+import supabase from './supabase-Client.js';
 
 
 function App() {
@@ -87,32 +87,13 @@ function App() {
               path="/dashboard"
               element={
                 isAuthenticated ? (
-                  <Dashboard setAuth={setAuth} />
+                  <Dashboard  />
                 ) : (
                   <Navigate to="/login" />
                 )
               }
             />
-            <Route
-              path="/profile"
-              element={
-                isAuthenticated ? (
-                  <Profile />
-                ) : (
-                  <Navigate to="/login" />
-                )
-              }
-            />
-              <Route
-                path="/notifications"
-                element={
-                  isAuthenticated ? (
-                    <NotifPage />
-                  ) : (
-                    <Navigate to="/login" />
-                  )
-                }
-              />
+            
               <Route
                 path="/search_talent"
                 element={

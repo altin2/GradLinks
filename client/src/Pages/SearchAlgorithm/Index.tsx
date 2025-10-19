@@ -1,6 +1,7 @@
 //Packages
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import DarkVeil from "../universal_components/DarkVeil";
 //Components or Types
 import Dock from "../universal_components/Dock";
 import DashbordBtn from "../Dashboard/components/LinktoPgBtn";
@@ -20,11 +21,14 @@ export default function SearchPage() {
       onClick: () => navigate("/dashboard"),
     },
   ];
-  const recieveResponse = (response) => {
+  const recieveResponse = (response: any) => {
     setResults(response ?? []);
   };
   return (
     <>
+      <div className="bg-div">
+        <DarkVeil />
+      </div>
       <div className="top-bar">
         <Dock
           items={items}

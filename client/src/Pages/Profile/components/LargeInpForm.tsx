@@ -8,6 +8,8 @@ type LargeInputFormProps = {
   rows?: number;
   cols?: number;
   maxTxtSize?: number;
+  small?: boolean;
+  "data-testid"?: string;
 };
 export default function LargeInputForm({
   onChange,
@@ -17,9 +19,11 @@ export default function LargeInputForm({
   rows,
   cols,
   maxTxtSize,
+  small,
+  "data-testid": dataTestId,
 }: LargeInputFormProps) {
   return (
-    <div className="input">
+    <div className={small !== null && small === true ? "input-3" : "input"}>
       <textarea
         rows={rows}
         cols={cols}
@@ -29,6 +33,7 @@ export default function LargeInputForm({
         placeholder={placeholder}
         className="form-control my-3"
         maxLength={maxTxtSize}
+        data-testid={dataTestId}
       >
         {value}
       </textarea>

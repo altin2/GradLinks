@@ -1,7 +1,10 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import "./FormTypeStyle.css";
-import Select from "react-select";
+import searchIcon from "../universal_components/universal_assets/searchTalent.svg";
+import plusIcon from "../universal_components/universal_assets/plusicon.svg";
+import minusicon from "../universal_components/universal_assets/minusicon.svg";
+import supabase from "../../supabase-Client";
 export const defaultskills = [
   "Full-stack developer",
   "Frontend developer",
@@ -28,16 +31,41 @@ interface UniProp {
   PROVIDER_NAME: string;
   VIEW_NAME: string;
 }
+interface DegreeProp {
+  defaultValue: any;
+  onChange: any;
+}
+interface SkillProp {
+  defaultValue?: string[];
+  onChange?: (skills: string[]) => void;
+  minHeightItems?: number;
+}
+interface UniComponentProp {
+  defaultValue?: string[];
+  onChange?: (uni: string[]) => void;
+  multiSelect?: boolean;
+  minHeightItems?: number;
+  classNameForm?: string;
+}
 export const Universities = await ImportUniversities();
 
 async function ImportUniversities(): Promise<UniProp[]> {
-  const res = await fetch("http://localhost:5000/search/returnunis");
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+  const res = await fetch("http://localhost:5000/search/returnunis", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${session?.access_token}`,
+    },
+  });
 
   const parseRes: Promise<UniProp[]> = await res.json();
   return parseRes;
 }
 
-export default function DegreeType({ defaultValue, onChange }) {
+export default function DegreeType({ defaultValue, onChange }: DegreeProp) {
   //syncing defaultValue
   const [selected, setSelected] = useState(defaultValue ?? "");
   useEffect(() => {
@@ -45,13 +73,13 @@ export default function DegreeType({ defaultValue, onChange }) {
       setSelected(defaultValue);
     }
   }, [defaultValue]);
-  const handleChange = (e) => {
+  const handleChange = (e: any) => {
     setSelected(e.target.value);
     if (onChange) onChange(e.target.value);
   };
   return (
     <>
-      <fieldset>
+      <fieldset data-testid="degreeType">
         <select
           className="form-control dropdown"
           id="education"
@@ -83,10 +111,8 @@ export default function DegreeType({ defaultValue, onChange }) {
 export function SkillsType({
   defaultValue = [],
   onChange,
-}: {
-  defaultValue?: string[];
-  onChange?: (skills: string[]) => void;
-}) {
+  minHeightItems,
+}: SkillProp) {
   const [selected, setSelected] = useState(defaultValue ?? []);
   const [isDropped, setIsDropped] = useState(false);
 
@@ -120,34 +146,47 @@ export function SkillsType({
 
   return (
     <>
-      <div>
+      <div data-testid="skillsType">
         <button
           type="button"
           onClick={onClickDropdown}
-          className="form-control dropdown"
+          className="form-control dropdown gray"
         >
-          ---Click to show skills---
+          {isDropped
+            ? "---Click to hide skills---"
+            : "---Click to show skills---"}
         </button>
       </div>
       {isDropped ? (
         <fieldset>
-          <div className="vertical-scroll">
-            {defaultskills.map((skill) => (
-              <div
-                key={skill}
-                onClick={() => toggleSkill(skill)}
-                style={{
-                  cursor: "pointer",
-                  padding: "6px 10px",
-                  margin: "2px 0",
-                  borderRadius: "4px",
-                  border: "1px solid #ccc",
-                  background: selected.includes(skill) ? "#007bff" : "white",
-                  color: selected.includes(skill) ? "white" : "black",
-                }}
-              >
-                {skill}
-              </div>
+          <div
+            className="vertical-scroll"
+            style={{ minHeight: minHeightItems * 42 || "300px" }}
+          >
+            {defaultskills.map((skill, idx) => (
+              <>
+                <div className="side-by-side">
+                  <img
+                    src={selected.includes(skill) ? minusicon : plusIcon}
+                    alt="Add skill"
+                    onClick={() => toggleSkill(skill)}
+                    className="multiselect-img-container"
+                    style={{ cursor: "pointer" }}
+                    data-testid={`imgSelect-${idx}`}
+                  />
+                  <div
+                    key={skill}
+                    onClick={() => toggleSkill(skill)}
+                    className={
+                      selected.includes(skill)
+                        ? "inputSelect_selected"
+                        : "inputSelect"
+                    }
+                  >
+                    {skill}
+                  </div>
+                </div>
+              </>
             ))}
           </div>
         </fieldset>
@@ -162,13 +201,10 @@ export function UniversityInput({
   defaultValue = [],
   onChange,
   multiSelect = false,
-}: {
-  defaultValue?: string[];
-  onChange?: (uni: string[]) => void;
-  multiSelect?: boolean;
-}) {
+  minHeightItems,
+  classNameForm,
+}: UniComponentProp) {
   const [selected, setSelected] = useState(defaultValue ?? []);
-  const [isDropped, setIsDropped] = useState(false);
   const [search, setSearch] = useState("");
   //syncing defaultValue
   useEffect(() => {
@@ -177,18 +213,14 @@ export function UniversityInput({
     }
   }, [defaultValue]);
 
-  //Checks if the inputs in the form have been changed
   useEffect(() => {
     if (onChange) {
       onChange(selected);
     }
   }, [selected, onChange]);
 
-  const onClickDropdown = () => {
-    setIsDropped(!isDropped);
-  };
   // toggles a university on click
-  const toggleUni = (uni) => {
+  const toggleUni = (uni: any) => {
     {
       multiSelect === true
         ? setSelected(
@@ -210,17 +242,20 @@ export function UniversityInput({
   );
   return (
     <>
-      <div>
+      <div className="side-by-side" data-testid="uniType">
+        <img src={searchIcon} className="search-img-container" />
         <input
           type="text"
-          onClick={onClickDropdown}
           onChange={(e) => setSearch(e.target.value)}
           value={search}
-          className="form-control dropdown"
+          className="search_bar"
         />
       </div>
-      <fieldset>
-        <div className="vertical-scroll">
+      <fieldset className={classNameForm ? classNameForm : ""}>
+        <div
+          className="vertical-scroll"
+          style={{ minHeight: minHeightItems * 42 || "300px" }}
+        >
           {filteredUnis.map((uni) => (
             <>
               <div

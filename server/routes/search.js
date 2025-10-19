@@ -1,5 +1,6 @@
 const supabase = require("../supabase-server.js");
 const router = require("express").Router();
+const {createUserSupabase} = require("../middleware/createuser.js")
 
 function ReturnNumberofMatchingItems(arr1,arr2){
     const intersection = arr1.filter(element => arr2.includes(element));
@@ -101,8 +102,8 @@ router.post("/", async (req, res) => {
       const sorted = SortByRelevance(dictionary);
       const prioritylist = sorted.slice(0, 10);
       const returnlist = prioritylist.map((entry) => entry.record);
-  
       return res.json(returnlist); 
+      
     } catch (err) {
       console.error(err);
       return res.status(500).send(err);
@@ -112,7 +113,9 @@ router.post("/", async (req, res) => {
 
 router.get("/returnunis",async(req,res)=>{
     try {
-        const {data,error} = await supabase 
+    const token = req.headers.authorization?.split(" ")[1]; 
+    const userSupabase = createUserSupabase(token);
+        const {data,error} = await userSupabase 
     .from("universities")
     .select()
     if (error){
